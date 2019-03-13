@@ -75,8 +75,7 @@ func (o *MatchQueryOperator) UnmarshalJSON(data []byte) error {
 // NewMatchQuery creates a Query for matching text.
 // An Analyzer is chosen based on the field.
 // Input text is analyzed using this analyzer.
-// Token terms resulting from this analysis are
-// used to perform term searches.  Result documents
+// Token terms resulting from this analysis are used to perform term searches.  Result documents
 // must satisfy at least one of these term searches.
 func NewMatchQuery(match string) *MatchQuery {
 	return &MatchQuery{

@@ -15,6 +15,8 @@
 package highlight
 
 import (
+	"fmt"
+
 	"github.com/blevesearch/bleve/document"
 	"github.com/blevesearch/bleve/search"
 )
@@ -26,6 +28,15 @@ type Fragment struct {
 	End            int
 	Score          float64
 	Index          int // used by heap
+}
+
+func (f Fragment) String() string {
+	return fmt.Sprintf("{Fragment: Orig=%d ArrayPositions=%d Start=%d End=%d len=%d Score=%.2f Index=%d}",
+		len(f.Orig), len(f.ArrayPositions), f.Start, f.End, f.End-f.Start, f.Score, f.Index)
+}
+
+func (f Fragment) Snip(text string) string {
+	return text[f.Start:f.End]
 }
 
 func (f *Fragment) Overlaps(other *Fragment) bool {
@@ -61,4 +72,6 @@ type Highlighter interface {
 
 	BestFragmentInField(*search.DocumentMatch, *document.Document, string) string
 	BestFragmentsInField(*search.DocumentMatch, *document.Document, string, int) []string
+	BestFragmentsInField2(*search.DocumentMatch, *document.Document, string, int) (
+		[]*TermLocation, []*Fragment, []string)
 }

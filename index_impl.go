@@ -294,10 +294,8 @@ func (i *indexImpl) Delete(id string) (err error) {
 	return
 }
 
-// Batch executes multiple Index and Delete
-// operations at the same time.  There are often
-// significant performance benefits when performing
-// operations in a batch.
+// Batch executes multiple Index and Delete operations at the same time.  There are often
+// significant performance benefits when performing operations in a batch.
 func (i *indexImpl) Batch(b *Batch) error {
 	i.mutex.RLock()
 	defer i.mutex.RUnlock()
@@ -430,9 +428,10 @@ func memNeededForSearch(req *SearchRequest,
 	return uint64(estimate)
 }
 
-// SearchInContext executes a search request operation within the provided
-// Context. Returns a SearchResult object or an error.
-func (i *indexImpl) SearchInContext(ctx context.Context, req *SearchRequest) (sr *SearchResult, err error) {
+// SearchInContext executes a search request operation within the provided Context.
+// Returns a SearchResult object or an error.
+func (i *indexImpl) SearchInContext(ctx context.Context, req *SearchRequest) (
+	sr *SearchResult, err error) {
 	i.mutex.RLock()
 	defer i.mutex.RUnlock()
 
@@ -525,7 +524,7 @@ func (i *indexImpl) SearchInContext(ctx context.Context, req *SearchRequest) (sr
 	var highlighter highlight.Highlighter
 
 	if req.Highlight != nil {
-		// get the right highlighter
+		// Get the right highlighter.
 		highlighter, err = Config.Cache.HighlighterNamed(Config.DefaultHighlighter)
 		if err != nil {
 			return nil, err
@@ -541,6 +540,7 @@ func (i *indexImpl) SearchInContext(ctx context.Context, req *SearchRequest) (sr
 		}
 	}
 
+	// !@#$
 	for _, hit := range hits {
 		if len(req.Fields) > 0 || highlighter != nil {
 			doc, err := indexReader.Document(hit.ID)
@@ -632,8 +632,7 @@ func (i *indexImpl) SearchInContext(ctx context.Context, req *SearchRequest) (sr
 	}, nil
 }
 
-// Fields returns the name of all the fields this
-// Index has operated on.
+// Fields returns the name of all the fields this Index has operated on.
 func (i *indexImpl) Fields() (fields []string, err error) {
 	i.mutex.RLock()
 	defer i.mutex.RUnlock()

@@ -24,19 +24,14 @@ import (
 	"github.com/blevesearch/bleve/registry"
 )
 
-// A DocumentMapping describes how a type of document
-// should be indexed.
-// As documents can be hierarchical, named sub-sections
-// of documents are mapped using the same structure in
-// the Properties field.
-// Each value inside a document can be indexed 0 or more
-// ways.  These index entries are called fields and
-// are stored in the Fields field.
-// Entire sections of a document can be ignored or
-// excluded by setting Enabled to false.
-// If not explicitly mapped, default mapping operations
-// are used.  To disable this automatic handling, set
-// Dynamic to false.
+// A DocumentMapping describes how a type of document should be indexed.
+// As documents can be hierarchical, named sub-sections of documents are mapped using the same
+// structure in the Properties field.
+// Each value inside a document can be indexed 0 or more ways.  These index entries are called
+// fields and are stored in the Fields field.
+// Entire sections of a document can be ignored or excluded by setting Enabled to false.
+// If not explicitly mapped, default mapping operations are used.  To disable this automatic
+// handling, set Dynamic to false.
 type DocumentMapping struct {
 	Enabled         bool                        `json:"enabled"`
 	Dynamic         bool                        `json:"dynamic"`

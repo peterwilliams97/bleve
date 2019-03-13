@@ -31,9 +31,8 @@ var DisjunctionMaxClauseCount = 0
 // slice implementation to a heap implementation.
 var DisjunctionHeapTakeover = 10
 
-func NewDisjunctionSearcher(indexReader index.IndexReader,
-	qsearchers []search.Searcher, min float64, options search.SearcherOptions) (
-	search.Searcher, error) {
+func NewDisjunctionSearcher(indexReader index.IndexReader, qsearchers []search.Searcher,
+	min float64, options search.SearcherOptions) (search.Searcher, error) {
 	return newDisjunctionSearcher(indexReader, qsearchers, min, options, true)
 }
 

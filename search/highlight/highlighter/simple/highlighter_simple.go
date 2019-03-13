@@ -33,7 +33,8 @@ type Highlighter struct {
 	sep        string
 }
 
-func NewHighlighter(fragmenter highlight.Fragmenter, formatter highlight.FragmentFormatter, separator string) *Highlighter {
+func NewHighlighter(fragmenter highlight.Fragmenter, formatter highlight.FragmentFormatter,
+	separator string) *Highlighter {
 	return &Highlighter{
 		fragmenter: fragmenter,
 		formatter:  formatter,
@@ -65,7 +66,8 @@ func (s *Highlighter) SetSeparator(sep string) {
 	s.sep = sep
 }
 
-func (s *Highlighter) BestFragmentInField(dm *search.DocumentMatch, doc *document.Document, field string) string {
+func (s *Highlighter) BestFragmentInField(dm *search.DocumentMatch, doc *document.Document,
+	field string) string {
 	fragments := s.BestFragmentsInField(dm, doc, field, 1)
 	if len(fragments) > 0 {
 		return fragments[0]
@@ -73,12 +75,21 @@ func (s *Highlighter) BestFragmentInField(dm *search.DocumentMatch, doc *documen
 	return ""
 }
 
-func (s *Highlighter) BestFragmentsInField(dm *search.DocumentMatch, doc *document.Document, field string, num int) []string {
+// BestFragmentsInField returns `doc` marked up with best fragments.
+func (s *Highlighter) BestFragmentsInField(dm *search.DocumentMatch, doc *document.Document,
+	field string, num int) []string {
+	_, _, formattedFragments := s.BestFragmentsInField2(dm, doc, field, num)
+	return formattedFragments
+}
+
+func (s *Highlighter) BestFragmentsInField2(dm *search.DocumentMatch, doc *document.Document,
+	field string, num int) ([]*highlight.TermLocation, []*highlight.Fragment, []string) {
+
 	tlm := dm.Locations[field]
 	orderedTermLocations := highlight.OrderTermLocations(tlm)
 	scorer := NewFragmentScorer(tlm)
 
-	// score the fragments and put them into a priority queue ordered by score
+	// Score the fragments and put them into a priority queue ordered by score. !@#$
 	fq := make(FragmentQueue, 0)
 	heap.Init(&fq)
 	for _, f := range doc.Fields {
@@ -103,7 +114,7 @@ func (s *Highlighter) BestFragmentsInField(dm *search.DocumentMatch, doc *docume
 		}
 	}
 
-	// now find the N best non-overlapping fragments
+	// Now find the N best non-overlapping fragments !@#$
 	var bestFragments []*highlight.Fragment
 	if len(fq) > 0 {
 		candidate := heap.Pop(&fq)
@@ -132,7 +143,7 @@ func (s *Highlighter) BestFragmentsInField(dm *search.DocumentMatch, doc *docume
 		}
 	}
 
-	// now that we have the best fragments, we can format them
+	// now that we have the best fragments, we can format them.
 	orderedTermLocations.MergeOverlapping()
 	formattedFragments := make([]string, len(bestFragments))
 	for i, fragment := range bestFragments {
@@ -150,10 +161,10 @@ func (s *Highlighter) BestFragmentsInField(dm *search.DocumentMatch, doc *docume
 		dm.Fragments = make(search.FieldFragmentMap, 0)
 	}
 	if len(formattedFragments) > 0 {
-		dm.Fragments[field] = formattedFragments
+		dm.Fragments[field] = formattedFragments // !@#$%
 	}
 
-	return formattedFragments
+	return orderedTermLocations, bestFragments, formattedFragments
 }
 
 // FragmentQueue implements heap.Interface and holds Items.

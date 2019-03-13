@@ -212,7 +212,7 @@ func (s *PhraseSearcher) Next(ctx *search.SearchContext) (*search.DocumentMatch,
 
 // checkCurrMustMatch is solely concerned with determining if the DocumentMatch
 // pointed to by s.currMust (which satisifies the pre-condition searcher)
-// also satisfies the phase constraints.  if so, it returns a DocumentMatch
+// also satisfies the phrase constraints.  if so, it returns a DocumentMatch
 // for this document, otherwise nil
 func (s *PhraseSearcher) checkCurrMustMatch(ctx *search.SearchContext) *search.DocumentMatch {
 	s.locations = s.currMust.Complete(s.locations)

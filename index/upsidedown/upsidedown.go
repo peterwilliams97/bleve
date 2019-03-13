@@ -36,11 +36,9 @@ import (
 
 const Name = "upside_down"
 
-// RowBufferSize should ideally this is sized to be the smallest
-// size that can contain an index row key and its corresponding
-// value.  It is not a limit, if need be a larger buffer is
-// allocated, but performance will be more optimal if *most*
-// rows fit this size.
+// RowBufferSize should ideally this is sized to be the smallest size that can contain an index row
+// key and its corresponding value.  It is not a limit, if need be a larger buffer is allocated, but
+// performance will be more optimal if *most* rows fit this size.
 const RowBufferSize = 4 * 1024
 
 var VersionKey = []byte{'v'}

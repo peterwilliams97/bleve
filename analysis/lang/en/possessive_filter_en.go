@@ -21,8 +21,7 @@ import (
 	"github.com/blevesearch/bleve/registry"
 )
 
-// PossessiveName is the name PossessiveFilter is registered as
-// in the bleve registry.
+// PossessiveName is the name PossessiveFilter is registered as in the bleve registry.
 const PossessiveName = "possessive_en"
 
 const rightSingleQuotationMark = '’'

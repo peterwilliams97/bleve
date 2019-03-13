@@ -76,8 +76,7 @@ func (s *DisjunctionQueryScorer) Score(ctx *search.SearchContext, constituents [
 	rv := constituents[0]
 	rv.Score = newScore
 	rv.Expl = newExpl
-	rv.FieldTermLocations = search.MergeFieldTermLocations(
-		rv.FieldTermLocations, constituents[1:])
+	rv.FieldTermLocations = search.MergeFieldTermLocations(rv.FieldTermLocations, constituents[1:])
 
 	return rv
 }

@@ -49,6 +49,7 @@ func (ap ArrayPositions) Equals(other ArrayPositions) bool {
 	return true
 }
 
+// !@#$
 type Location struct {
 	// Pos is the position of the term within the field, starting at 1
 	Pos uint64 `json:"pos"`
@@ -94,18 +95,17 @@ type DocumentMatch struct {
 	Fragments       FieldFragmentMap      `json:"fragments,omitempty"`
 	Sort            []string              `json:"sort,omitempty"`
 
-	// Fields contains the values for document fields listed in
-	// SearchRequest.Fields. Text fields are returned as strings, numeric
-	// fields as float64s and date fields as time.RFC3339 formatted strings.
+	// Fields contains the values for document fields listed in SearchRequest.Fields. Text fields
+	// are returned as strings, numeric fields as float64s and date fields as time.RFC3339 formatted
+	// strings.
 	Fields map[string]interface{} `json:"fields,omitempty"`
 
-	// used to maintain natural index order
+	// Used to maintain natural index order.
 	HitNumber uint64 `json:"-"`
 
-	// used to temporarily hold field term location information during
-	// search processing in an efficient, recycle-friendly manner, to
-	// be later incorporated into the Locations map when search
-	// results are completed
+	// Used to temporarily hold field term location information during search processing in an
+	// efficient, recycle-friendly manner, to be later incorporated into the Locations map when
+	// search results are completed.
 	FieldTermLocations []FieldTermLocation `json:"-"`
 }
 
@@ -130,7 +130,7 @@ func (dm *DocumentMatch) AddFieldValue(name string, value interface{}) {
 	dm.Fields[name] = valSlice
 }
 
-// Reset allows an already allocated DocumentMatch to be reused
+// Reset allows an already allocated DocumentMatch to be reused.
 func (dm *DocumentMatch) Reset() *DocumentMatch {
 	// remember the []byte used for the IndexInternalID
 	indexInternalID := dm.IndexInternalID
@@ -194,9 +194,8 @@ func (dm *DocumentMatch) Size() int {
 	return sizeInBytes
 }
 
-// Complete performs final preparation & transformation of the
-// DocumentMatch at the end of search processing, also allowing the
-// caller to provide an optional preallocated locations slice
+// Complete performs final preparation & transformation of the DocumentMatch at the end of search
+// processing, also allowing the caller to provide an optional preallocated locations slice.
 func (dm *DocumentMatch) Complete(prealloc []Location) []Location {
 	// transform the FieldTermLocations slice into the Locations map
 	nlocs := len(dm.FieldTermLocations)
@@ -275,7 +274,7 @@ type SearcherOptions struct {
 	Score              string
 }
 
-// SearchContext represents the context around a single search
+// SearchContext represents the context around a single search.
 type SearchContext struct {
 	DocumentMatchPool *DocumentMatchPool
 	Collector         Collector

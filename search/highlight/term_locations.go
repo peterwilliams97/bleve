@@ -15,6 +15,7 @@
 package highlight
 
 import (
+	"fmt"
 	"reflect"
 	"sort"
 
@@ -27,6 +28,15 @@ type TermLocation struct {
 	Pos            int
 	Start          int
 	End            int
+}
+
+func (f TermLocation) String() string {
+	return fmt.Sprintf("{TermLocation: ArrayPositions=%d Pos=%d Start=%d End=%d len=%d %q}",
+		len(f.ArrayPositions), f.Pos, f.Start, f.End, f.End-f.Start, f.Term)
+}
+
+func (f TermLocation) Snip(text string) string {
+	return text[f.Start:f.End]
 }
 
 func (tl *TermLocation) Overlaps(other *TermLocation) bool {
@@ -51,7 +61,7 @@ func (t TermLocations) Less(i, j int) bool {
 		shortestArrayPositions = len(t[j].ArrayPositions)
 	}
 
-	// compare all the common array positions
+	// compare all the common array positions.
 	for api := 0; api < shortestArrayPositions; api++ {
 		if t[i].ArrayPositions[api] < t[j].ArrayPositions[api] {
 			return true

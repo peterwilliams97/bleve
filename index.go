@@ -137,38 +137,32 @@ func (b *Batch) PersistedCallback() index.BatchCallback {
 	return b.internal.PersistedCallback()
 }
 
-// An Index implements all the indexing and searching
-// capabilities of bleve.  An Index can be created
-// using the New() and Open() methods.
+// An Index implements all the indexing and searching capabilities of bleve.  An Index can be
+// created using the New() and Open() methods.
 //
 // Index() takes an input value, deduces a DocumentMapping for its type,
 // assigns string paths to its fields or values then applies field mappings on
 // them.
 //
 // The DocumentMapping used to index a value is deduced by the following rules:
-// 1) If value implements mapping.bleveClassifier interface, resolve the mapping
-//    from BleveType().
-// 2) If value implements mapping.Classifier interface, resolve the mapping
-//    from Type().
-// 3) If value has a string field or value at IndexMapping.TypeField.
-// (defaulting to "_type"), use it to resolve the mapping. Fields addressing
-// is described below.
+// 1) If value implements mapping.bleveClassifier interface, resolve the mapping from BleveType().
+// 2) If value implements mapping.Classifier interface, resolve the mapping from Type().
+// 3) If value has a string field or value at IndexMapping.TypeField. (defaulting to "_type"), use
+//    it to resolve the mapping. Fields addressing is described below.
 // 4) If IndexMapping.DefaultType is registered, return it.
 // 5) Return IndexMapping.DefaultMapping.
 //
-// Each field or nested field of the value is identified by a string path, then
-// mapped to one or several FieldMappings which extract the result for analysis.
+// Each field or nested field of the value is identified by a string path, then mapped to one or
+// several FieldMappings which extract the result for analysis.
 //
 // Struct values fields are identified by their "json:" tag, or by their name.
-// Nested fields are identified by prefixing with their parent identifier,
-// separated by a dot.
+// Nested fields are identified by prefixing with their parent identifier, separated by a dot.
 //
-// Map values entries are identified by their string key. Entries not indexed
-// by strings are ignored. Entry values are identified recursively like struct
-// fields.
+// Map values entries are identified by their string key. Entries not indexed by strings are
+// ignored. Entry values are identified recursively like struct fields.
 //
-// Slice and array values are identified by their field name. Their elements
-// are processed sequentially with the same FieldMapping.
+// Slice and array values are identified by their field name. Their elements are processed
+// sequentially with the same FieldMapping.
 //
 // String, float64 and time.Time values are identified by their field name.
 // Other types are ignored.
@@ -249,17 +243,14 @@ type Index interface {
 }
 
 // New index at the specified path, must not exist.
-// The provided mapping will be used for all
-// Index/Search operations.
+// The provided mapping will be used for all Index/Search operations.
 func New(path string, mapping mapping.IndexMapping) (Index, error) {
 	return newIndexUsing(path, mapping, Config.DefaultIndexType, Config.DefaultKVStore, nil)
 }
 
 // NewMemOnly creates a memory-only index.
-// The contents of the index is NOT persisted,
-// and will be lost once closed.
-// The provided mapping will be used for all
-// Index/Search operations.
+// The contents of the index is NOT persisted, and will be lost once closed.
+// The provided mapping will be used for all Index/Search operations.
 func NewMemOnly(mapping mapping.IndexMapping) (Index, error) {
 	return newIndexUsing("", mapping, Config.DefaultIndexType, Config.DefaultMemKVStore, nil)
 }

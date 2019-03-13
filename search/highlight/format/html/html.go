@@ -36,7 +36,8 @@ func NewFragmentFormatter(before, after string) *FragmentFormatter {
 	}
 }
 
-func (a *FragmentFormatter) Format(f *highlight.Fragment, orderedTermLocations highlight.TermLocations) string {
+func (a *FragmentFormatter) Format(f *highlight.Fragment,
+	orderedTermLocations highlight.TermLocations) string {
 	rv := ""
 	curr := f.Start
 	for _, termLocation := range orderedTermLocations {
@@ -70,7 +71,8 @@ func (a *FragmentFormatter) Format(f *highlight.Fragment, orderedTermLocations h
 	return rv
 }
 
-func Constructor(config map[string]interface{}, cache *registry.Cache) (highlight.FragmentFormatter, error) {
+func Constructor(config map[string]interface{}, cache *registry.Cache) (highlight.FragmentFormatter,
+	error) {
 	before := defaultHTMLHighlightBefore
 	beforeVal, ok := config["before"].(string)
 	if ok {

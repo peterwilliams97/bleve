@@ -33,13 +33,10 @@ const defaultField = "_all"
 const defaultAnalyzer = standard.Name
 const defaultDateTimeParser = optional.Name
 
-// An IndexMappingImpl controls how objects are placed
-// into an index.
+// An IndexMappingImpl controls how objects are placed into an index.
 // First the type of the object is determined.
-// Once the type is know, the appropriate
-// DocumentMapping is selected by the type.
-// If no mapping was determined for that type,
-// a DefaultMapping will be used.
+// Once the type is know, the appropriate DocumentMapping is selected by the type.
+// If no mapping was determined for that type, a DefaultMapping will be used.
 type IndexMappingImpl struct {
 	TypeMapping           map[string]*DocumentMapping `json:"types,omitempty"`
 	DefaultMapping        *DocumentMapping            `json:"default_mapping"`

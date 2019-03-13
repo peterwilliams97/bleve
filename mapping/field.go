@@ -31,8 +31,7 @@ var (
 	DocValuesDynamic = true // TODO revisit default?
 )
 
-// A FieldMapping describes how a specific item
-// should be put into the index.
+// A FieldMapping describes how a specific item should be put into the index.
 type FieldMapping struct {
 	Name string `json:"name,omitempty"`
 	Type string `json:"type,omitempty"`
@@ -56,7 +55,7 @@ type FieldMapping struct {
 	IncludeInAll       bool   `json:"include_in_all,omitempty"`
 	DateFormat         string `json:"date_format,omitempty"`
 
-	// DocValues, if true makes the index uninverting possible for this field
+	// DocValues, if true makes the index uninverting possible for this field.
 	// It is useful for faceting and sorting queries.
 	DocValues bool `json:"docvalues,omitempty"`
 }

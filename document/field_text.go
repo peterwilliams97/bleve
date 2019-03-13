@@ -91,7 +91,8 @@ func (t *TextField) Value() []byte {
 }
 
 func (t *TextField) GoString() string {
-	return fmt.Sprintf("&document.TextField{Name:%s, Options: %s, Analyzer: %v, Value: %s, ArrayPositions: %v}", t.name, t.options, t.analyzer, t.value, t.arrayPositions)
+	return fmt.Sprintf("&document.TextField{Name:%s, Options: %s, Analyzer: %v, Value: %s, ArrayPositions: %v}",
+		t.name, t.options, t.analyzer, t.value, t.arrayPositions)
 }
 
 func (t *TextField) NumPlainTextBytes() uint64 {
@@ -102,7 +103,8 @@ func NewTextField(name string, arrayPositions []uint64, value []byte) *TextField
 	return NewTextFieldWithIndexingOptions(name, arrayPositions, value, DefaultTextIndexingOptions)
 }
 
-func NewTextFieldWithIndexingOptions(name string, arrayPositions []uint64, value []byte, options IndexingOptions) *TextField {
+func NewTextFieldWithIndexingOptions(name string, arrayPositions []uint64, value []byte,
+	options IndexingOptions) *TextField {
 	return &TextField{
 		name:              name,
 		arrayPositions:    arrayPositions,
@@ -112,7 +114,8 @@ func NewTextFieldWithIndexingOptions(name string, arrayPositions []uint64, value
 	}
 }
 
-func NewTextFieldWithAnalyzer(name string, arrayPositions []uint64, value []byte, analyzer *analysis.Analyzer) *TextField {
+func NewTextFieldWithAnalyzer(name string, arrayPositions []uint64, value []byte,
+	analyzer *analysis.Analyzer) *TextField {
 	return &TextField{
 		name:              name,
 		arrayPositions:    arrayPositions,
@@ -123,7 +126,8 @@ func NewTextFieldWithAnalyzer(name string, arrayPositions []uint64, value []byte
 	}
 }
 
-func NewTextFieldCustom(name string, arrayPositions []uint64, value []byte, options IndexingOptions, analyzer *analysis.Analyzer) *TextField {
+func NewTextFieldCustom(name string, arrayPositions []uint64, value []byte, options IndexingOptions,
+	analyzer *analysis.Analyzer) *TextField {
 	return &TextField{
 		name:              name,
 		arrayPositions:    arrayPositions,

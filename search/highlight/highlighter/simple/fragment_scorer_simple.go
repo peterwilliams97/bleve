@@ -19,9 +19,8 @@ import (
 	"github.com/blevesearch/bleve/search/highlight"
 )
 
-// FragmentScorer will score fragments by how many
-// unique terms occur in the fragment with no regard for
-// any boost values used in the original query
+// FragmentScorer will score fragments by how many unique terms occur in the fragment with no regard
+// for any boost values used in the original query. !@#$
 type FragmentScorer struct {
 	tlm search.TermLocationMap
 }
@@ -37,10 +36,10 @@ func (s *FragmentScorer) Score(f *highlight.Fragment) {
 OUTER:
 	for _, locations := range s.tlm {
 		for _, location := range locations {
-			if location.ArrayPositions.Equals(f.ArrayPositions) && int(location.Start) >= f.Start && int(location.End) <= f.End {
+			if location.ArrayPositions.Equals(f.ArrayPositions) &&
+				f.Start <= int(location.Start) && int(location.End) <= f.End {
 				score += 1.0
-				// once we find a term in the fragment
-				// don't care about additional matches
+				// Once we find a term in the fragment, we don't care about additional matches.
 				continue OUTER
 			}
 		}

@@ -219,15 +219,13 @@ func (fr FacetsRequest) Validate() error {
 	return nil
 }
 
-// HighlightRequest describes how field matches
-// should be highlighted.
+// HighlightRequest describes how field matches should be highlighted.
 type HighlightRequest struct {
 	Style  *string  `json:"style"`
 	Fields []string `json:"fields"`
 }
 
-// NewHighlight creates a default
-// HighlightRequest.
+// NewHighlight creates a default HighlightRequest.
 func NewHighlight() *HighlightRequest {
 	return &HighlightRequest{}
 }
@@ -247,19 +245,14 @@ func (h *HighlightRequest) AddField(field string) {
 	h.Fields = append(h.Fields, field)
 }
 
-// A SearchRequest describes all the parameters
-// needed to search the index.
+// A SearchRequest describes all the parameters needed to search the index.
 // Query is required.
-// Size/From describe how much and which part of the
-// result set to return.
-// Highlight describes optional search result
-// highlighting.
-// Fields describes a list of field values which
-// should be retrieved for result documents, provided they
-// were stored while indexing.
+// Size/From describe how much and which part of the result set to return.
+// Highlight describes optional search result highlighting.
+// Fields describes a list of field values which should be retrieved for result documents, provided
+// they were stored while indexing.
 // Facets describe the set of facets to be computed.
-// Explain triggers inclusion of additional search
-// result score explanations.
+// Explain triggers inclusion of additional search result score explanations.
 // Sort describes the desired order for the results to be returned.
 // Score controls the kind of scoring performed
 //
@@ -311,8 +304,7 @@ func (r *SearchRequest) SortByCustom(order search.SortOrder) {
 	r.Sort = order
 }
 
-// UnmarshalJSON deserializes a JSON representation of
-// a SearchRequest
+// UnmarshalJSON deserializes a JSON representation of a SearchRequest.
 func (r *SearchRequest) UnmarshalJSON(input []byte) error {
 	var temp struct {
 		Q                json.RawMessage   `json:"query"`
@@ -365,7 +357,6 @@ func (r *SearchRequest) UnmarshalJSON(input []byte) error {
 	}
 
 	return nil
-
 }
 
 // NewSearchRequest creates a new SearchRequest
@@ -413,7 +404,7 @@ func (iem IndexErrMap) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// SearchStatus is a secion in the SearchResult reporting how many
+// SearchStatus is a section in the SearchResult reporting how many
 // underlying indexes were queried, how many were successful/failed
 // and a map of any errors that were encountered
 type SearchStatus struct {
@@ -438,8 +429,7 @@ func (ss *SearchStatus) Merge(other *SearchStatus) {
 	}
 }
 
-// A SearchResult describes the results of executing
-// a SearchRequest.
+// A SearchResult describes the results of executing a SearchRequest. !@#$
 type SearchResult struct {
 	Status   *SearchStatus                  `json:"status"`
 	Request  *SearchRequest                 `json:"request"`
@@ -472,7 +462,8 @@ func (sr *SearchResult) String() string {
 	rv := ""
 	if sr.Total > 0 {
 		if sr.Request.Size > 0 {
-			rv = fmt.Sprintf("%d matches, showing %d through %d, took %s\n", sr.Total, sr.Request.From+1, sr.Request.From+len(sr.Hits), sr.Took)
+			rv = fmt.Sprintf("%d matches, showing %d through %d, took %s\n",
+				sr.Total, sr.Request.From+1, sr.Request.From+len(sr.Hits), sr.Took)
 			for i, hit := range sr.Hits {
 				rv += fmt.Sprintf("%5d. %s (%f)\n", i+sr.Request.From+1, hit.ID, hit.Score)
 				for fragmentField, fragments := range hit.Fragments {

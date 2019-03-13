@@ -19,6 +19,7 @@ import (
 	"github.com/blevesearch/bleve/search/highlight"
 )
 
+// !@#$ Why can't this be accessed?
 const Name = "ansi"
 
 const DefaultAnsiHighlight = BgYellow
@@ -33,7 +34,8 @@ func NewFragmentFormatter(color string) *FragmentFormatter {
 	}
 }
 
-func (a *FragmentFormatter) Format(f *highlight.Fragment, orderedTermLocations highlight.TermLocations) string {
+func (a *FragmentFormatter) Format(f *highlight.Fragment,
+	orderedTermLocations highlight.TermLocations) string {
 	rv := ""
 	curr := f.Start
 	for _, termLocation := range orderedTermLocations {
@@ -95,7 +97,8 @@ const (
 	BgWhite    = "\x1b[47m"
 )
 
-func Constructor(config map[string]interface{}, cache *registry.Cache) (highlight.FragmentFormatter, error) {
+func Constructor(config map[string]interface{}, cache *registry.Cache) (highlight.FragmentFormatter,
+	error) {
 	color := DefaultAnsiHighlight
 	colorVal, ok := config["color"].(string)
 	if ok {

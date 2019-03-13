@@ -682,7 +682,6 @@ func NewTermFrequencyRowKV(key, value []byte) (*TermFrequencyRow, error) {
 		return nil, err
 	}
 	return rv, nil
-
 }
 
 type BackIndexRow struct {

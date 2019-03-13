@@ -115,8 +115,7 @@ func NewMatchPhraseQuery(matchPhrase string) *query.MatchPhraseQuery {
 // NewMatchQuery creates a Query for matching text.
 // An Analyzer is chosen based on the field.
 // Input text is analyzed using this analyzer.
-// Token terms resulting from this analysis are
-// used to perform term searches.  Result documents
+// Token terms resulting from this analysis are used to perform term searches.  Result documents
 // must satisfy at least one of these term searches.
 func NewMatchQuery(match string) *query.MatchQuery {
 	return query.NewMatchQuery(match)
