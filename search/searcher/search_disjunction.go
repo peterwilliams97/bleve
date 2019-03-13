@@ -39,6 +39,8 @@ func NewDisjunctionSearcher(indexReader index.IndexReader, qsearchers []search.S
 func newDisjunctionSearcher(indexReader index.IndexReader,
 	qsearchers []search.Searcher, min float64, options search.SearcherOptions,
 	limit bool) (search.Searcher, error) {
+	// panic("newDisjunctionSearcher-")
+
 	// attempt the "unadorned" disjunction optimization only when we
 	// do not need extra information like freq-norm's or term vectors
 	// and the requested min is simple
@@ -47,16 +49,17 @@ func newDisjunctionSearcher(indexReader index.IndexReader,
 		rv, err := optimizeCompositeSearcher("disjunction:unadorned",
 			indexReader, qsearchers, options)
 		if err != nil || rv != nil {
+			panic("newDisjunctionSearcher->optimizeCompositeSearcher")
 			return rv, err
 		}
 	}
 
 	if len(qsearchers) > DisjunctionHeapTakeover {
-		return newDisjunctionHeapSearcher(indexReader, qsearchers, min, options,
-			limit)
+		panic("newDisjunctionSearcher->newDisjunctionHeapSearcher")
+		return newDisjunctionHeapSearcher(indexReader, qsearchers, min, options, limit)
 	}
-	return newDisjunctionSliceSearcher(indexReader, qsearchers, min, options,
-		limit)
+	// panic("newDisjunctionSearcher->newDisjunctionSliceSearcher")
+	return newDisjunctionSliceSearcher(indexReader, qsearchers, min, options, limit)
 }
 
 func optimizeCompositeSearcher(optimizationKind string,

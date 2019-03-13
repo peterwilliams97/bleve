@@ -35,6 +35,7 @@ func NewFragmenter(fragmentSize int) *Fragmenter {
 	}
 }
 
+// Where is the score?
 func (s *Fragmenter) Fragment(orig []byte, ot highlight.TermLocations) []*highlight.Fragment {
 	var rv []*highlight.Fragment
 	maxbegin := 0
@@ -54,9 +55,8 @@ OUTER:
 			used++
 		}
 
-		// if we still have more characters available to us
-		// push back towards beginning
-		// without cross maxbegin
+		// If we still have more characters available to us, push back towards beginning
+		// without crossing maxbegin.
 		for start > 0 && used < s.fragmentSize {
 			r, size := utf8.DecodeLastRune(orig[0:start])
 			if r == utf8.RuneError {

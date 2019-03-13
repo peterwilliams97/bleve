@@ -35,19 +35,23 @@ type IndexReader struct {
 	docCount uint64
 }
 
-func (i *IndexReader) TermFieldReader(term []byte, fieldName string, includeFreq, includeNorm, includeTermVectors bool) (index.TermFieldReader, error) {
+func (i *IndexReader) TermFieldReader(term []byte, fieldName string, includeFreq, includeNorm,
+	includeTermVectors bool) (index.TermFieldReader, error) {
 	fieldIndex, fieldExists := i.index.fieldCache.FieldNamed(fieldName, false)
 	if fieldExists {
-		return newUpsideDownCouchTermFieldReader(i, term, uint16(fieldIndex), includeFreq, includeNorm, includeTermVectors)
+		return newUpsideDownCouchTermFieldReader(i, term, uint16(fieldIndex),
+			includeFreq, includeNorm, includeTermVectors)
 	}
-	return newUpsideDownCouchTermFieldReader(i, []byte{ByteSeparator}, ^uint16(0), includeFreq, includeNorm, includeTermVectors)
+	return newUpsideDownCouchTermFieldReader(i, []byte{ByteSeparator}, ^uint16(0),
+		includeFreq, includeNorm, includeTermVectors)
 }
 
 func (i *IndexReader) FieldDict(fieldName string) (index.FieldDict, error) {
 	return i.FieldDictRange(fieldName, nil, nil)
 }
 
-func (i *IndexReader) FieldDictRange(fieldName string, startTerm []byte, endTerm []byte) (index.FieldDict, error) {
+func (i *IndexReader) FieldDictRange(fieldName string, startTerm []byte, endTerm []byte) (
+	index.FieldDict, error) {
 	fieldIndex, fieldExists := i.index.fieldCache.FieldNamed(fieldName, false)
 	if fieldExists {
 		return newUpsideDownCouchFieldDict(i, uint16(fieldIndex), startTerm, endTerm)
@@ -110,7 +114,8 @@ func (i *IndexReader) Document(id string) (doc *document.Document, err error) {
 	return
 }
 
-func (i *IndexReader) DocumentVisitFieldTerms(id index.IndexInternalID, fields []string, visitor index.DocumentFieldTermVisitor) error {
+func (i *IndexReader) DocumentVisitFieldTerms(id index.IndexInternalID, fields []string,
+	visitor index.DocumentFieldTermVisitor) error {
 	fieldsMap := make(map[uint16]string, len(fields))
 	for _, f := range fields {
 		id, ok := i.index.fieldCache.FieldNamed(f, false)
@@ -222,5 +227,6 @@ type DocValueReader struct {
 
 func (dvr *DocValueReader) VisitDocValues(id index.IndexInternalID,
 	visitor index.DocumentFieldTermVisitor) error {
+	// panic("DocValueReader) VisitDocValues")
 	return dvr.i.DocumentVisitFieldTerms(id, dvr.fields, visitor)
 }

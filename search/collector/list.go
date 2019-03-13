@@ -16,6 +16,7 @@ package collector
 
 import (
 	"container/list"
+	"fmt"
 
 	"github.com/blevesearch/bleve/search"
 )
@@ -76,6 +77,7 @@ func (c *collectStoreList) Final(skip int, fixup collectorFixup) (search.Documen
 			}
 			i++
 		}
+		fmt.Printf("collectStoreList Final %d\n", len(rv))
 		return rv, nil
 	}
 	return search.DocumentMatchCollection{}, nil

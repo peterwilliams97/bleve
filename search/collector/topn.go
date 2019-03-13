@@ -16,6 +16,7 @@ package collector
 
 import (
 	"context"
+	"fmt"
 	"reflect"
 	"time"
 
@@ -32,16 +33,14 @@ func init() {
 }
 
 type collectorStore interface {
-	// Add the document, and if the new store size exceeds the provided size
-	// the last element is removed and returned.  If the size has not been
-	// exceeded, nil is returned.
+	// Add the document, and if the new store size exceeds the provided size the last element is
+	// removed and returned.  If the size has not been exceeded, nil is returned.
 	AddNotExceedingSize(doc *search.DocumentMatch, size int) *search.DocumentMatch
 
 	Final(skip int, fixup collectorFixup) (search.DocumentMatchCollection, error)
 }
 
-// PreAllocSizeSkipCap will cap preallocation to this amount when
-// size+skip exceeds this value
+// PreAllocSizeSkipCap will cap preallocation to this amount when size+skip exceeds this value.
 var PreAllocSizeSkipCap = 1000
 
 type collectorCompare func(i, j *search.DocumentMatch) int
@@ -75,12 +74,12 @@ type TopNCollector struct {
 const CheckDoneEvery = uint64(1024)
 
 // NewTopNCollector builds a collector to find the top 'size' hits skipping over the first 'skip'
-// hits ordering hits by the provided sort order
+// hits ordering hits by the provided sort order.
 func NewTopNCollector(size, skip int, sort search.SortOrder) *TopNCollector {
 	hc := &TopNCollector{size: size, skip: skip, sort: sort}
 
-	// pre-allocate space on the store to avoid reslicing
-	// unless the size + skip is too large, then cap it
+	// pre-allocate space on the store to avoid reslicing unless the size + skip is too large, then
+	// cap it
 	// everything should still work, just reslices as necessary
 	backingSize := size + skip + 1
 	if size+skip > PreAllocSizeSkipCap {
@@ -127,20 +126,24 @@ func (hc *TopNCollector) Size() int {
 // Collect goes to the index to find the matching documents.
 func (hc *TopNCollector) Collect(ctx context.Context, searcher search.Searcher,
 	reader index.IndexReader) error {
+	fmt.Println("+++ TopNCollector.Collect")
+
 	startTime := time.Now()
 	var err error
 	var next *search.DocumentMatch
 
-	// pre-allocate enough space in the DocumentMatchPool unless the size + skip is too large, then
-	// cap it. everything should still work, just allocates DocumentMatches on demand.
+	// Pre-allocate enough space in the DocumentMatchPool unless the size + skip is too large, then
+	// cap it. Everything should still work, just allocates DocumentMatches on demand.
 	backingSize := hc.size + hc.skip + 1
 	if hc.size+hc.skip > PreAllocSizeSkipCap {
 		backingSize = PreAllocSizeSkipCap + 1
 	}
 	searchContext := &search.SearchContext{
+
 		DocumentMatchPool: search.NewDocumentMatchPool(backingSize+searcher.DocumentMatchPoolSize(),
 			len(hc.sort)),
-		Collector: hc,
+		Collector:   hc,
+		IndexReader: reader,
 	}
 
 	hc.dvReader, err = reader.DocValueReader(hc.neededFields)
@@ -255,8 +258,9 @@ func (hc *TopNCollector) prepareDocumentMatch(ctx *search.SearchContext,
 	return nil
 }
 
-func MakeTopNDocumentMatchHandler(
-	ctx *search.SearchContext) (search.DocumentMatchHandler, bool, error) {
+func MakeTopNDocumentMatchHandler(ctx *search.SearchContext) (
+	search.DocumentMatchHandler, bool, error) {
+
 	var hc *TopNCollector
 	var ok bool
 	if hc, ok = ctx.Collector.(*TopNCollector); ok {
@@ -312,17 +316,17 @@ func (hc *TopNCollector) visitFieldTerms(reader index.IndexReader, d *search.Doc
 	return err
 }
 
-// SetFacetsBuilder registers a facet builder for this collector
+// SetFacetsBuilder registers a facet builder for this collector.
 func (hc *TopNCollector) SetFacetsBuilder(facetsBuilder *search.FacetsBuilder) {
 	hc.facetsBuilder = facetsBuilder
 	hc.neededFields = append(hc.neededFields, hc.facetsBuilder.RequiredFields()...)
 }
 
-// finalizeResults starts with the heap containing the final top size+skip
-// it now throws away the results to be skipped
-// and does final doc id lookup (if necessary)
+// finalizeResults starts with the heap containing the final top size+skip.
+// It now throws away the results to be skipped and does final doc id lookup (if necessary).
 func (hc *TopNCollector) finalizeResults(r index.IndexReader) error {
 	var err error
+	fmt.Printf("```finalizeResults %d results\n", len(hc.results))
 	hc.results, err = hc.store.Final(hc.skip, func(doc *search.DocumentMatch) error {
 		if doc.ID == "" {
 			// look up the id since we need it for lookup
@@ -333,9 +337,10 @@ func (hc *TopNCollector) finalizeResults(r index.IndexReader) error {
 			}
 		}
 		doc.Complete(nil)
+		fmt.Printf("  finalizeResults+ %d results\n", len(hc.results))
 		return nil
 	})
-
+	fmt.Printf("finalizeResults* %d results\n", len(hc.results))
 	return err
 }
 

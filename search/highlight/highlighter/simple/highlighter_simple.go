@@ -92,16 +92,20 @@ func (s *Highlighter) BestFragmentsInField2(dm *search.DocumentMatch, doc *docum
 	// Score the fragments and put them into a priority queue ordered by score. !@#$
 	fq := make(FragmentQueue, 0)
 	heap.Init(&fq)
-	for _, f := range doc.Fields {
+	for i, f := range doc.Fields {
 		if f.Name() == field {
 			_, ok := f.(*document.TextField)
 			if ok {
+				fmt.Printf("$@$ %d: f=%q %+q\n", i, f.Name(), string(f.Value()))
+
 				termLocationsSameArrayPosition := make(highlight.TermLocations, 0)
 				for _, otl := range orderedTermLocations {
 					if otl.ArrayPositions.Equals(f.ArrayPositions()) {
 						termLocationsSameArrayPosition = append(termLocationsSameArrayPosition, otl)
 					}
 				}
+				fmt.Printf("$-- same=%d %+v\n", len(termLocationsSameArrayPosition),
+					termLocationsSameArrayPosition)
 
 				fieldData := f.Value()
 				fragments := s.fragmenter.Fragment(fieldData, termLocationsSameArrayPosition)
@@ -114,7 +118,7 @@ func (s *Highlighter) BestFragmentsInField2(dm *search.DocumentMatch, doc *docum
 		}
 	}
 
-	// Now find the N best non-overlapping fragments !@#$
+	// Now find the N best non-overlapping fragments. !@#$
 	var bestFragments []*highlight.Fragment
 	if len(fq) > 0 {
 		candidate := heap.Pop(&fq)

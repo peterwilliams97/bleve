@@ -17,6 +17,7 @@ package scorer
 import (
 	"fmt"
 	"reflect"
+	"strings"
 
 	"github.com/blevesearch/bleve/search"
 	"github.com/blevesearch/bleve/size"
@@ -43,15 +44,18 @@ func NewDisjunctionQueryScorer(options search.SearcherOptions) *DisjunctionQuery
 	}
 }
 
-func (s *DisjunctionQueryScorer) Score(ctx *search.SearchContext, constituents []*search.DocumentMatch, countMatch, countTotal int) *search.DocumentMatch {
+func (s *DisjunctionQueryScorer) Score(ctx *search.SearchContext, constituents []*search.DocumentMatch,
+	countMatch, countTotal int) *search.DocumentMatch {
 	var sum float64
 	var childrenExplanations []*search.Explanation
 	if s.options.Explain {
 		childrenExplanations = make([]*search.Explanation, len(constituents))
 	}
 
+	var parts []string
 	for i, docMatch := range constituents {
 		sum += docMatch.Score
+		parts = append(parts, fmt.Sprintf("%.2f", docMatch.Score))
 		if s.options.Explain {
 			childrenExplanations[i] = docMatch.Expl
 		}
@@ -64,6 +68,8 @@ func (s *DisjunctionQueryScorer) Score(ctx *search.SearchContext, constituents [
 
 	coord := float64(countMatch) / float64(countTotal)
 	newScore := sum * coord
+	fmt.Printf("@@@ newScore=%.3f (countMatch=%d countTotal=%d sum=%.2f=(%s)\n", newScore,
+		countMatch, countTotal, sum, strings.Join(parts, " + "))
 	var newExpl *search.Explanation
 	if s.options.Explain {
 		ce := make([]*search.Explanation, 2)

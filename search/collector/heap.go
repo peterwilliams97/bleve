@@ -16,6 +16,7 @@ package collector
 
 import (
 	"container/heap"
+	"fmt"
 
 	"github.com/blevesearch/bleve/search"
 )
@@ -66,6 +67,7 @@ func (c *collectStoreHeap) Final(skip int, fixup collectorFixup) (search.Documen
 			return nil, err
 		}
 	}
+	fmt.Printf("collectStoreHeap Final %d\n", len(rv))
 	return rv, nil
 }
 

@@ -197,8 +197,10 @@ func (dm *DocumentMatch) Size() int {
 // Complete performs final preparation & transformation of the DocumentMatch at the end of search
 // processing, also allowing the caller to provide an optional preallocated locations slice.
 func (dm *DocumentMatch) Complete(prealloc []Location) []Location {
-	// transform the FieldTermLocations slice into the Locations map
+	// Transform the FieldTermLocations slice into the Locations map.
 	nlocs := len(dm.FieldTermLocations)
+	fmt.Printf("    DocumentMatch.Complete: nlocs=%d\n", nlocs)
+
 	if nlocs > 0 {
 		if cap(prealloc) < nlocs {
 			prealloc = make([]Location, nlocs)
@@ -278,6 +280,7 @@ type SearcherOptions struct {
 type SearchContext struct {
 	DocumentMatchPool *DocumentMatchPool
 	Collector         Collector
+	IndexReader       index.IndexReader
 }
 
 func (sc *SearchContext) Size() int {

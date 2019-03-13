@@ -113,7 +113,11 @@ func (q *MatchQuery) SetOperator(operator MatchQueryOperator) {
 	q.Operator = operator
 }
 
-func (q *MatchQuery) Searcher(i index.IndexReader, m mapping.IndexMapping, options search.SearcherOptions) (search.Searcher, error) {
+// !@#$
+func (q *MatchQuery) Searcher(i index.IndexReader, m mapping.IndexMapping,
+	options search.SearcherOptions) (search.Searcher, error) {
+
+	// panic(fmt.Errorf("q=%#v", *q))
 
 	field := q.FieldVal
 	if q.FieldVal == "" {

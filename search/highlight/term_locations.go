@@ -56,13 +56,13 @@ func (t TermLocations) Len() int      { return len(t) }
 func (t TermLocations) Swap(i, j int) { t[i], t[j] = t[j], t[i] }
 func (t TermLocations) Less(i, j int) bool {
 
-	shortestArrayPositions := len(t[i].ArrayPositions)
-	if len(t[j].ArrayPositions) < shortestArrayPositions {
-		shortestArrayPositions = len(t[j].ArrayPositions)
+	n := len(t[i].ArrayPositions)
+	if len(t[j].ArrayPositions) < n {
+		n = len(t[j].ArrayPositions)
 	}
 
 	// compare all the common array positions.
-	for api := 0; api < shortestArrayPositions; api++ {
+	for api := 0; api < n; api++ {
 		if t[i].ArrayPositions[api] < t[j].ArrayPositions[api] {
 			return true
 		}

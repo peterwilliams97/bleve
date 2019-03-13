@@ -60,7 +60,8 @@ func (s *TermQueryScorer) Size() int {
 	return sizeInBytes
 }
 
-func NewTermQueryScorer(queryTerm []byte, queryField string, queryBoost float64, docTotal, docTerm uint64, options search.SearcherOptions) *TermQueryScorer {
+func NewTermQueryScorer(queryTerm []byte, queryField string, queryBoost float64,
+	docTotal, docTerm uint64, options search.SearcherOptions) *TermQueryScorer {
 	rv := TermQueryScorer{
 		queryTerm:   string(queryTerm),
 		queryField:  queryField,
@@ -105,14 +106,17 @@ func (s *TermQueryScorer) SetQueryNorm(qnorm float64) {
 			Message: "queryNorm",
 		}
 		s.queryWeightExplanation = &search.Explanation{
-			Value:    s.queryWeight,
-			Message:  fmt.Sprintf("queryWeight(%s:%s^%f), product of:", s.queryField, s.queryTerm, s.queryBoost),
+			Value: s.queryWeight,
+			Message: fmt.Sprintf("queryWeight(%s:%s^%f), product of:",
+				s.queryField, s.queryTerm, s.queryBoost),
 			Children: childrenExplanations,
 		}
 	}
 }
 
+// !@#$
 func (s *TermQueryScorer) Score(ctx *search.SearchContext, termMatch *index.TermFieldDoc) *search.DocumentMatch {
+	// panic(fmt.Errorf("TermQueryScorer) Score %#v", *s))
 	var scoreExplanation *search.Explanation
 
 	// need to compute score
@@ -123,6 +127,8 @@ func (s *TermQueryScorer) Score(ctx *search.SearchContext, termMatch *index.Term
 		tf = math.Sqrt(float64(termMatch.Freq))
 	}
 	score := tf * termMatch.Norm * s.idf
+	fmt.Printf("~~~ score=%.2f (tf=%.1f termMatch.Norm=%.1f s.idf=%.1f) ",
+		score, tf, termMatch.Norm, s.idf)
 
 	if s.options.Explain {
 		childrenExplanations := make([]*search.Explanation, 3)
@@ -136,8 +142,9 @@ func (s *TermQueryScorer) Score(ctx *search.SearchContext, termMatch *index.Term
 		}
 		childrenExplanations[2] = s.idfExplanation
 		scoreExplanation = &search.Explanation{
-			Value:    score,
-			Message:  fmt.Sprintf("fieldWeight(%s:%s in %s), product of:", s.queryField, s.queryTerm, termMatch.ID),
+			Value: score,
+			Message: fmt.Sprintf("fieldWeight(%s:%s in %s), product of:",
+				s.queryField, s.queryTerm, termMatch.ID),
 			Children: childrenExplanations,
 		}
 	}
@@ -150,12 +157,14 @@ func (s *TermQueryScorer) Score(ctx *search.SearchContext, termMatch *index.Term
 			childExplanations[0] = s.queryWeightExplanation
 			childExplanations[1] = scoreExplanation
 			scoreExplanation = &search.Explanation{
-				Value:    score,
-				Message:  fmt.Sprintf("weight(%s:%s^%f in %s), product of:", s.queryField, s.queryTerm, s.queryBoost, termMatch.ID),
+				Value: score,
+				Message: fmt.Sprintf("weight(%s:%s^%f in %s), product of:",
+					s.queryField, s.queryTerm, s.queryBoost, termMatch.ID),
 				Children: childExplanations,
 			}
 		}
 	}
+	fmt.Printf("=> score=%.2f\n", score)
 
 	rv := ctx.DocumentMatchPool.Get()
 	rv.IndexInternalID = append(rv.IndexInternalID, termMatch.ID...)

@@ -15,6 +15,7 @@
 package searcher
 
 import (
+	"fmt"
 	"math"
 	"reflect"
 	"sort"
@@ -45,10 +46,9 @@ type DisjunctionSliceSearcher struct {
 	initialized  bool
 }
 
-func newDisjunctionSliceSearcher(indexReader index.IndexReader,
-	qsearchers []search.Searcher, min float64, options search.SearcherOptions,
-	limit bool) (
-	*DisjunctionSliceSearcher, error) {
+func newDisjunctionSliceSearcher(indexReader index.IndexReader, qsearchers []search.Searcher,
+	min float64, options search.SearcherOptions, limit bool) (*DisjunctionSliceSearcher, error) {
+
 	if limit && tooManyClauses(len(qsearchers)) {
 		return nil, tooManyClausesErr(len(qsearchers))
 	}
@@ -181,8 +181,7 @@ func (s *DisjunctionSliceSearcher) SetQueryNorm(qnorm float64) {
 	}
 }
 
-func (s *DisjunctionSliceSearcher) Next(ctx *search.SearchContext) (
-	*search.DocumentMatch, error) {
+func (s *DisjunctionSliceSearcher) Next(ctx *search.SearchContext) (*search.DocumentMatch, error) {
 	if !s.initialized {
 		err := s.initSearchers(ctx)
 		if err != nil {
@@ -216,6 +215,11 @@ func (s *DisjunctionSliceSearcher) Next(ctx *search.SearchContext) (
 		if err != nil {
 			return nil, err
 		}
+	}
+	if rv == nil {
+		fmt.Printf("DisjunctionSliceSearcher: rv=%v\n", rv)
+	} else {
+		fmt.Printf("DisjunctionSliceSearcher: rv=%.3f\n", rv.Score)
 	}
 	return rv, nil
 }

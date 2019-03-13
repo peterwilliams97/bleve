@@ -25,16 +25,11 @@ func NewBoolFieldQuery(val bool) *query.BoolFieldQuery {
 	return query.NewBoolFieldQuery(val)
 }
 
-// NewBooleanQuery creates a compound Query composed
-// of several other Query objects.
-// These other query objects are added using the
-// AddMust() AddShould() and AddMustNot() methods.
-// Result documents must satisfy ALL of the
-// must Queries.
-// Result documents must satisfy NONE of the must not
-// Queries.
-// Result documents that ALSO satisfy any of the should
-// Queries will score higher.
+// NewBooleanQuery creates a compound Query composed of several other Query objects.
+// These other query objects are added using the AddMust() AddShould() and AddMustNot() methods.
+// Result documents must satisfy ALL of the  must Queries.
+// Result documents must satisfy NONE of the must not Queries.
+// Result documents that ALSO satisfy any of the should Queries will score higher.
 func NewBooleanQuery() *query.BooleanQuery {
 	return query.NewBooleanQuery(nil, nil, nil)
 }
@@ -45,8 +40,7 @@ func NewConjunctionQuery(conjuncts ...query.Query) *query.ConjunctionQuery {
 	return query.NewConjunctionQuery(conjuncts)
 }
 
-// NewDateRangeQuery creates a new Query for ranges
-// of date values.
+// NewDateRangeQuery creates a new Query for ranges of date values.
 // Date strings are parsed using the DateTimeParser configured in the
 //  top-level config.QueryDateTimeParser
 // Either, but not both endpoints can be nil.
@@ -54,10 +48,8 @@ func NewDateRangeQuery(start, end time.Time) *query.DateRangeQuery {
 	return query.NewDateRangeQuery(start, end)
 }
 
-// NewDateRangeInclusiveQuery creates a new Query for ranges
-// of date values.
-// Date strings are parsed using the DateTimeParser configured in the
-//  top-level config.QueryDateTimeParser
+// NewDateRangeInclusiveQuery creates a new Query for ranges of date values.
+// Date strings are parsed using the DateTimeParser configured in the top-level config.QueryDateTimeParser
 // Either, but not both endpoints can be nil.
 // startInclusive and endInclusive control inclusion of the endpoints.
 func NewDateRangeInclusiveQuery(start, end time.Time, startInclusive, endInclusive *bool) *query.DateRangeQuery {
