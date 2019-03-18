@@ -33,6 +33,7 @@ import (
 	"github.com/blevesearch/bleve/search/collector"
 	"github.com/blevesearch/bleve/search/facet"
 	"github.com/blevesearch/bleve/search/highlight"
+	"github.com/unidoc/unidoc/common"
 )
 
 type indexImpl struct {
@@ -520,9 +521,9 @@ func (i *indexImpl) SearchInContext(ctx context.Context, req *SearchRequest) (
 	}
 
 	hits := collector.Results()
-	fmt.Printf("&&& indexImpl.SearchInContex: hit=%d\n", len(hits))
+	common.Log.Debug("&&& indexImpl.SearchInContex: hit=%d", len(hits))
 	for i, h := range hits {
-		fmt.Printf("%6d: %s\n", i, h)
+		common.Log.Debug("%6d: %s", i, h)
 	}
 	// panic("ff")
 
