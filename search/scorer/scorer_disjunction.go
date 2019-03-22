@@ -21,6 +21,7 @@ import (
 
 	"github.com/blevesearch/bleve/search"
 	"github.com/blevesearch/bleve/size"
+	"github.com/unidoc/unidoc/common"
 )
 
 var reflectStaticSizeDisjunctionQueryScorer int
@@ -44,6 +45,7 @@ func NewDisjunctionQueryScorer(options search.SearcherOptions) *DisjunctionQuery
 	}
 }
 
+// !@#$
 func (s *DisjunctionQueryScorer) Score(ctx *search.SearchContext, constituents []*search.DocumentMatch,
 	countMatch, countTotal int) *search.DocumentMatch {
 	var sum float64
@@ -56,6 +58,11 @@ func (s *DisjunctionQueryScorer) Score(ctx *search.SearchContext, constituents [
 	for i, docMatch := range constituents {
 		sum += docMatch.Score
 		parts = append(parts, fmt.Sprintf("%.2f", docMatch.Score))
+		common.Log.Debug("   %d: score=%.2f %d FieldTermLocations", i, docMatch.Score,
+			len(docMatch.FieldTermLocations))
+		for j, f := range docMatch.FieldTermLocations {
+			common.Log.Debug("      %d: %v", j, f)
+		}
 		if s.options.Explain {
 			childrenExplanations[i] = docMatch.Expl
 		}
@@ -68,7 +75,7 @@ func (s *DisjunctionQueryScorer) Score(ctx *search.SearchContext, constituents [
 
 	coord := float64(countMatch) / float64(countTotal)
 	newScore := sum * coord
-	fmt.Printf("@@@ newScore=%.3f (countMatch=%d countTotal=%d sum=%.2f=(%s)\n", newScore,
+	common.Log.Debug("@@@ newScore=%.3f (countMatch=%d countTotal=%d sum=%.2f=(%s)", newScore,
 		countMatch, countTotal, sum, strings.Join(parts, " + "))
 	var newExpl *search.Explanation
 	if s.options.Explain {

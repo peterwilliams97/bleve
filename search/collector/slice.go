@@ -15,9 +15,8 @@
 package collector
 
 import (
-	"fmt"
-
 	"github.com/blevesearch/bleve/search"
+	"github.com/unidoc/unidoc/common"
 )
 
 type collectStoreSlice struct {
@@ -64,16 +63,16 @@ func (c *collectStoreSlice) removeLast() *search.DocumentMatch {
 }
 
 func (c *collectStoreSlice) Final(skip int, fixup collectorFixup) (search.DocumentMatchCollection, error) {
-	fmt.Println("    collectStoreSlice.Final")
+	common.Log.Debug("    collectStoreSlice.Final")
 	for i := skip; i < len(c.slice); i++ {
-		fmt.Printf("    collectStoreSlice.Final: i=%d\n", i)
+		common.Log.Debug("    collectStoreSlice.Final: i=%d", i)
 		err := fixup(c.slice[i])
 		if err != nil {
 			return nil, err
 		}
 	}
 	if skip <= len(c.slice) {
-		fmt.Printf("    collectStoreSlice.Final: %d->%d\n", len(c.slice), len(c.slice)-skip)
+		common.Log.Debug("    collectStoreSlice.Final: %d->%d", len(c.slice), len(c.slice)-skip)
 		// panic("ggg")
 		return c.slice[skip:], nil
 	}

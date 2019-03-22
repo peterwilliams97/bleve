@@ -15,7 +15,6 @@
 package searcher
 
 import (
-	"fmt"
 	"math"
 	"reflect"
 	"sort"
@@ -24,6 +23,7 @@ import (
 	"github.com/blevesearch/bleve/search"
 	"github.com/blevesearch/bleve/search/scorer"
 	"github.com/blevesearch/bleve/size"
+	"github.com/unidoc/unidoc/common"
 )
 
 var reflectStaticSizeDisjunctionSliceSearcher int
@@ -41,7 +41,7 @@ type DisjunctionSliceSearcher struct {
 	currs        []*search.DocumentMatch
 	scorer       *scorer.DisjunctionQueryScorer
 	min          int
-	matching     []*search.DocumentMatch
+	matching     []*search.DocumentMatch // !@#$
 	matchingIdxs []int
 	initialized  bool
 }
@@ -120,6 +120,7 @@ func (s *DisjunctionSliceSearcher) initSearchers(ctx *search.SearchContext) erro
 		if s.currs[i] != nil {
 			ctx.DocumentMatchPool.Put(s.currs[i])
 		}
+		common.Log.Debug("DisjunctionSliceSearcher.initSearchers b) i=%d searcher=%T", i, searcher)
 		s.currs[i], err = searcher.Next(ctx)
 		if err != nil {
 			return err
@@ -136,6 +137,8 @@ func (s *DisjunctionSliceSearcher) initSearchers(ctx *search.SearchContext) erro
 }
 
 func (s *DisjunctionSliceSearcher) updateMatches() error {
+	common.Log.Debug("DisjunctionSliceSearcher.updateMatches")
+
 	matching := s.matching[:0]
 	matchingIdxs := s.matchingIdxs[:0]
 
@@ -159,10 +162,13 @@ func (s *DisjunctionSliceSearcher) updateMatches() error {
 
 		matching = append(matching, curr)
 		matchingIdxs = append(matchingIdxs, i)
+		common.Log.Debug("i=%d matchingIdxs=%+v", i, matchingIdxs)
 	}
 
 	s.matching = matching
 	s.matchingIdxs = matchingIdxs
+	common.Log.Debug("--- matching=%v %T", matching, matching)
+	common.Log.Debug("--- matchingIdxs=%+v", matchingIdxs)
 
 	return nil
 }
@@ -196,6 +202,8 @@ func (s *DisjunctionSliceSearcher) Next(ctx *search.SearchContext) (*search.Docu
 		if len(s.matching) >= s.min {
 			found = true
 			// score this match
+			common.Log.Debug("DisjunctionSliceSearcher.Next: matching=%d min=%d",
+				len(s.matching), s.min)
 			rv = s.scorer.Score(ctx, s.matching, len(s.matching), s.numSearchers)
 		}
 
@@ -217,9 +225,9 @@ func (s *DisjunctionSliceSearcher) Next(ctx *search.SearchContext) (*search.Docu
 		}
 	}
 	if rv == nil {
-		fmt.Printf("DisjunctionSliceSearcher: rv=%v\n", rv)
+		common.Log.Debug("DisjunctionSliceSearcher: rv=%v", rv)
 	} else {
-		fmt.Printf("DisjunctionSliceSearcher: rv=%.3f\n", rv.Score)
+		common.Log.Debug("DisjunctionSliceSearcher: rv=%.3f", rv.Score)
 	}
 	return rv, nil
 }

@@ -376,7 +376,8 @@ func (tv *TermVector) Size() int {
 }
 
 func (tv *TermVector) String() string {
-	return fmt.Sprintf("Field: %d Pos: %d Start: %d End %d ArrayPositions: %#v", tv.field, tv.pos, tv.start, tv.end, tv.arrayPositions)
+	return fmt.Sprintf("Field: %d Pos: %d Start: %d End %d ArrayPositions: %#v",
+		tv.field, tv.pos, tv.start, tv.end, tv.arrayPositions)
 }
 
 type TermFrequencyRow struct {
@@ -518,10 +519,12 @@ func (tfr *TermFrequencyRow) ValueTo(buf []byte) (int, error) {
 }
 
 func (tfr *TermFrequencyRow) String() string {
-	return fmt.Sprintf("Term: `%s` Field: %d DocId: `%s` Frequency: %d Norm: %f Vectors: %v", string(tfr.term), tfr.field, string(tfr.doc), tfr.freq, tfr.norm, tfr.vectors)
+	return fmt.Sprintf("Term: `%s` Field: %d DocId: `%s` Frequency: %d Norm: %f Vectors: %v",
+		string(tfr.term), tfr.field, string(tfr.doc), tfr.freq, tfr.norm, tfr.vectors)
 }
 
-func InitTermFrequencyRow(tfr *TermFrequencyRow, term []byte, field uint16, docID []byte, freq uint64, norm float32) *TermFrequencyRow {
+func InitTermFrequencyRow(tfr *TermFrequencyRow, term []byte, field uint16, docID []byte,
+	freq uint64, norm float32) *TermFrequencyRow {
 	tfr.term = term
 	tfr.field = field
 	tfr.doc = docID
@@ -540,7 +543,8 @@ func NewTermFrequencyRow(term []byte, field uint16, docID []byte, freq uint64, n
 	}
 }
 
-func NewTermFrequencyRowWithTermVectors(term []byte, field uint16, docID []byte, freq uint64, norm float32, vectors []*TermVector) *TermFrequencyRow {
+func NewTermFrequencyRowWithTermVectors(term []byte, field uint16, docID []byte, freq uint64,
+	norm float32, vectors []*TermVector) *TermFrequencyRow {
 	return &TermFrequencyRow{
 		term:    term,
 		field:   field,

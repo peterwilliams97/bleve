@@ -23,6 +23,7 @@ import (
 	"github.com/blevesearch/bleve/index"
 	"github.com/blevesearch/bleve/index/store"
 	"github.com/blevesearch/bleve/size"
+	"github.com/unidoc/unidoc/common"
 )
 
 var reflectStaticSizeUpsideDownCouchTermFieldReader int
@@ -30,11 +31,9 @@ var reflectStaticSizeUpsideDownCouchDocIDReader int
 
 func init() {
 	var tfr UpsideDownCouchTermFieldReader
-	reflectStaticSizeUpsideDownCouchTermFieldReader =
-		int(reflect.TypeOf(tfr).Size())
+	reflectStaticSizeUpsideDownCouchTermFieldReader = int(reflect.TypeOf(tfr).Size())
 	var cdr UpsideDownCouchDocIDReader
-	reflectStaticSizeUpsideDownCouchDocIDReader =
-		int(reflect.TypeOf(cdr).Size())
+	reflectStaticSizeUpsideDownCouchDocIDReader = int(reflect.TypeOf(cdr).Size())
 }
 
 type UpsideDownCouchTermFieldReader struct {
@@ -62,7 +61,9 @@ func (r *UpsideDownCouchTermFieldReader) Size() int {
 	return sizeInBytes
 }
 
-func newUpsideDownCouchTermFieldReader(indexReader *IndexReader, term []byte, field uint16, includeFreq, includeNorm, includeTermVectors bool) (*UpsideDownCouchTermFieldReader, error) {
+func newUpsideDownCouchTermFieldReader(indexReader *IndexReader, term []byte, field uint16,
+	includeFreq, includeNorm, includeTermVectors bool) (*UpsideDownCouchTermFieldReader, error) {
+
 	bufNeeded := termFrequencyRowKeySize(term, nil)
 	if bufNeeded < dictionaryRowKeySize(term) {
 		bufNeeded = dictionaryRowKeySize(term)
@@ -109,11 +110,14 @@ func (r *UpsideDownCouchTermFieldReader) Count() uint64 {
 	return r.count
 }
 
-func (r *UpsideDownCouchTermFieldReader) Next(preAlloced *index.TermFieldDoc) (*index.TermFieldDoc, error) {
+func (r *UpsideDownCouchTermFieldReader) Next(preAlloced *index.TermFieldDoc) (
+	*index.TermFieldDoc, error) {
+
+	common.Log.Debug("UpsideDownCouchTermFieldReader.Next")
+
 	if r.iterator != nil {
-		// We treat tfrNext also like an initialization flag, which
-		// tells us whether we need to invoke the underlying
-		// iterator.Next().  The first time, don't call iterator.Next().
+		// We treat tfrNext also like an initialization flag, which tells us whether we need to
+		// invoke the underlying iterator.Next().  The first time, don't call iterator.Next().
 		if r.tfrNext != nil {
 			r.iterator.Next()
 		} else {
@@ -146,7 +150,8 @@ func (r *UpsideDownCouchTermFieldReader) Next(preAlloced *index.TermFieldDoc) (*
 	return nil, nil
 }
 
-func (r *UpsideDownCouchTermFieldReader) Advance(docID index.IndexInternalID, preAlloced *index.TermFieldDoc) (rv *index.TermFieldDoc, err error) {
+func (r *UpsideDownCouchTermFieldReader) Advance(docID index.IndexInternalID,
+	preAlloced *index.TermFieldDoc) (rv *index.TermFieldDoc, err error) {
 	if r.iterator != nil {
 		if r.tfrNext == nil {
 			r.tfrNext = &TermFrequencyRow{}

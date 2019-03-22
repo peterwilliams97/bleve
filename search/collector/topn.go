@@ -16,13 +16,13 @@ package collector
 
 import (
 	"context"
-	"fmt"
 	"reflect"
 	"time"
 
 	"github.com/blevesearch/bleve/index"
 	"github.com/blevesearch/bleve/search"
 	"github.com/blevesearch/bleve/size"
+	"github.com/unidoc/unidoc/common"
 )
 
 var reflectStaticSizeTopNCollector int
@@ -126,7 +126,7 @@ func (hc *TopNCollector) Size() int {
 // Collect goes to the index to find the matching documents.
 func (hc *TopNCollector) Collect(ctx context.Context, searcher search.Searcher,
 	reader index.IndexReader) error {
-	fmt.Println("+++ TopNCollector.Collect")
+	common.Log.Debug("+++ TopNCollector.Collect")
 
 	startTime := time.Now()
 	var err error
@@ -139,7 +139,6 @@ func (hc *TopNCollector) Collect(ctx context.Context, searcher search.Searcher,
 		backingSize = PreAllocSizeSkipCap + 1
 	}
 	searchContext := &search.SearchContext{
-
 		DocumentMatchPool: search.NewDocumentMatchPool(backingSize+searcher.DocumentMatchPoolSize(), len(hc.sort)),
 		Collector:         hc,
 		IndexReader:       reader,
@@ -325,7 +324,7 @@ func (hc *TopNCollector) SetFacetsBuilder(facetsBuilder *search.FacetsBuilder) {
 // It now throws away the results to be skipped and does final doc id lookup (if necessary).
 func (hc *TopNCollector) finalizeResults(r index.IndexReader) error {
 	var err error
-	fmt.Printf("```finalizeResults %d results\n", len(hc.results))
+	common.Log.Debug("```finalizeResults %d results", len(hc.results))
 	hc.results, err = hc.store.Final(hc.skip, func(doc *search.DocumentMatch) error {
 		if doc.ID == "" {
 			// look up the id since we need it for lookup
@@ -336,10 +335,10 @@ func (hc *TopNCollector) finalizeResults(r index.IndexReader) error {
 			}
 		}
 		doc.Complete(nil)
-		fmt.Printf("  finalizeResults+ %d results\n", len(hc.results))
+		common.Log.Debug("  finalizeResults+ %d results", len(hc.results))
 		return nil
 	})
-	fmt.Printf("finalizeResults* %d results\n", len(hc.results))
+	common.Log.Debug("finalizeResults* %d results", len(hc.results))
 	return err
 }
 

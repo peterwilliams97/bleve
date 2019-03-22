@@ -44,8 +44,7 @@ func (expl *Explanation) String() string {
 }
 
 func (expl *Explanation) Size() int {
-	sizeInBytes := reflectStaticSizeExplanation + size.SizeOfPtr +
-		len(expl.Message)
+	sizeInBytes := reflectStaticSizeExplanation + size.SizeOfPtr + len(expl.Message)
 
 	for _, entry := range expl.Children {
 		sizeInBytes += entry.Size()

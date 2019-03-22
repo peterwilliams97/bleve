@@ -68,6 +68,7 @@ func (a *FragmentFormatter) Format(f *highlight.Fragment,
 	// add any remaining text after the last token
 	rv += string(f.Orig[curr:f.End])
 
+
 	return rv
 }
 

@@ -610,7 +610,10 @@ func encodeFieldType(f document.Field) byte {
 	return fieldType
 }
 
-func (udc *UpsideDownCouch) indexField(docID []byte, includeTermVectors bool, fieldIndex uint16, fieldLength int, tokenFreqs analysis.TokenFrequencies, rows []index.IndexRow, backIndexTermsEntries []*BackIndexTermsEntry) ([]index.IndexRow, []*BackIndexTermsEntry) {
+func (udc *UpsideDownCouch) indexField(docID []byte, includeTermVectors bool, fieldIndex uint16,
+	fieldLength int, tokenFreqs analysis.TokenFrequencies, rows []index.IndexRow,
+	backIndexTermsEntries []*BackIndexTermsEntry) ([]index.IndexRow, []*BackIndexTermsEntry) {
+
 	fieldNorm := float32(1.0 / math.Sqrt(float64(fieldLength)))
 
 	termFreqRows := make([]TermFrequencyRow, len(tokenFreqs))
@@ -706,7 +709,8 @@ func (udc *UpsideDownCouch) Delete(id string) (err error) {
 	return
 }
 
-func (udc *UpsideDownCouch) deleteSingle(id string, backIndexRow *BackIndexRow, deleteRows []UpsideDownCouchRow) []UpsideDownCouchRow {
+func (udc *UpsideDownCouch) deleteSingle(id string, backIndexRow *BackIndexRow,
+	deleteRows []UpsideDownCouchRow) []UpsideDownCouchRow {
 	idBytes := []byte(id)
 
 	for _, backIndexEntry := range backIndexRow.termsEntries {
@@ -745,7 +749,9 @@ func frequencyFromTokenFreq(tf *analysis.TokenFreq) int {
 	return tf.Frequency()
 }
 
-func (udc *UpsideDownCouch) termVectorsFromTokenFreq(field uint16, tf *analysis.TokenFreq, rows []index.IndexRow) ([]*TermVector, []index.IndexRow) {
+func (udc *UpsideDownCouch) termVectorsFromTokenFreq(field uint16, tf *analysis.TokenFreq,
+	rows []index.IndexRow) ([]*TermVector, []index.IndexRow) {
+
 	a := make([]TermVector, len(tf.Locations))
 	rv := make([]*TermVector, len(tf.Locations))
 
@@ -908,7 +914,8 @@ func (udc *UpsideDownCouch) Batch(batch *index.Batch) (err error) {
 			}
 			docsDeleted++
 		} else if dbir.doc != nil {
-			addRows, updateRows, deleteRows := udc.mergeOldAndNew(dbir.backIndexRow, newRowsMap[dbir.docID])
+			addRows, updateRows, deleteRows := udc.mergeOldAndNew(dbir.backIndexRow,
+				newRowsMap[dbir.docID])
 			if len(addRows) > 0 {
 				addRowsAll = append(addRowsAll, addRows)
 			}

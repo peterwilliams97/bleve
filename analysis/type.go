@@ -36,11 +36,9 @@ const (
 	Boolean
 )
 
-// Token represents one occurrence of a term at a particular location in a
-// field.
+// Token represents one occurrence of a term at a particular location in a field.
 type Token struct {
-	// Start specifies the byte offset of the beginning of the term in the
-	// field.
+	// Start specifies the byte offset of the beginning of the term in the field.
 	Start int `json:"start"`
 
 	// End specifies the byte offset of the end of the term in the field.
@@ -55,7 +53,8 @@ type Token struct {
 }
 
 func (t *Token) String() string {
-	return fmt.Sprintf("Start: %d  End: %d  Position: %d  Token: %s  Type: %d", t.Start, t.End, t.Position, string(t.Term), t.Type)
+	return fmt.Sprintf("Start: %d  End: %d  Position: %d  Token: %s  Type: %d",
+		t.Start, t.End, t.Position, string(t.Term), t.Type)
 }
 
 type TokenStream []*Token

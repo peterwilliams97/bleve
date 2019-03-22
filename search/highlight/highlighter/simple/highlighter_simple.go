@@ -22,6 +22,7 @@ import (
 	"github.com/blevesearch/bleve/registry"
 	"github.com/blevesearch/bleve/search"
 	"github.com/blevesearch/bleve/search/highlight"
+	"github.com/unidoc/unidoc/common"
 )
 
 const Name = "simple"
@@ -96,7 +97,7 @@ func (s *Highlighter) BestFragmentsInField2(dm *search.DocumentMatch, doc *docum
 		if f.Name() == field {
 			_, ok := f.(*document.TextField)
 			if ok {
-				fmt.Printf("$@$ %d: f=%q %+q\n", i, f.Name(), string(f.Value()))
+				common.Log.Debug("$@$ %d: f=%q %+q", i, f.Name(), string(f.Value()))
 
 				termLocationsSameArrayPosition := make(highlight.TermLocations, 0)
 				for _, otl := range orderedTermLocations {
@@ -104,7 +105,7 @@ func (s *Highlighter) BestFragmentsInField2(dm *search.DocumentMatch, doc *docum
 						termLocationsSameArrayPosition = append(termLocationsSameArrayPosition, otl)
 					}
 				}
-				fmt.Printf("$-- same=%d %+v\n", len(termLocationsSameArrayPosition),
+				common.Log.Debug("$-- same=%d %+v", len(termLocationsSameArrayPosition),
 					termLocationsSameArrayPosition)
 
 				fieldData := f.Value()
@@ -147,7 +148,7 @@ func (s *Highlighter) BestFragmentsInField2(dm *search.DocumentMatch, doc *docum
 		}
 	}
 
-	// now that we have the best fragments, we can format them.
+	// Now that we have the best fragments, we can format them.
 	orderedTermLocations.MergeOverlapping()
 	formattedFragments := make([]string, len(bestFragments))
 	for i, fragment := range bestFragments {

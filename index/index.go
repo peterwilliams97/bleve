@@ -157,7 +157,7 @@ func (tfv *TermFieldVector) Size() int {
 		len(tfv.Field) + len(tfv.ArrayPositions)*size.SizeOfUint64
 }
 
-// IndexInternalID is an opaque document identifier interal to the index impl
+// IndexInternalID is an opaque document identifier interal to the index impl.
 type IndexInternalID []byte
 
 func (id IndexInternalID) Equals(other IndexInternalID) bool {
@@ -177,8 +177,7 @@ type TermFieldDoc struct {
 }
 
 func (tfd *TermFieldDoc) Size() int {
-	sizeInBytes := reflectStaticSizeTermFieldDoc + size.SizeOfPtr +
-		len(tfd.Term) + len(tfd.ID)
+	sizeInBytes := reflectStaticSizeTermFieldDoc + size.SizeOfPtr + len(tfd.Term) + len(tfd.ID)
 
 	for _, entry := range tfd.Vectors {
 		sizeInBytes += entry.Size()
@@ -200,17 +199,15 @@ func (tfd *TermFieldDoc) Reset() *TermFieldDoc {
 	return tfd
 }
 
-// TermFieldReader is the interface exposing the enumeration of documents
-// containing a given term in a given field. Documents are returned in byte
-// lexicographic order over their identifiers.
+// TermFieldReader is the interface exposing the enumeration of documents containing a given term in
+// a given field. Documents are returned in byte lexicographic order over their identifiers.
 type TermFieldReader interface {
 	// Next returns the next document containing the term in this field, or nil
 	// when it reaches the end of the enumeration.  The preAlloced TermFieldDoc
 	// is optional, and when non-nil, will be used instead of allocating memory.
 	Next(preAlloced *TermFieldDoc) (*TermFieldDoc, error)
 
-	// Advance resets the enumeration at specified document or its immediate
-	// follower.
+	// Advance resets the enumeration at specified document or its immediate follower.
 	Advance(ID IndexInternalID, preAlloced *TermFieldDoc) (*TermFieldDoc, error)
 
 	// Count returns the number of documents contains the term in this field.

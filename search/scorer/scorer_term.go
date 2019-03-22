@@ -22,6 +22,7 @@ import (
 	"github.com/blevesearch/bleve/index"
 	"github.com/blevesearch/bleve/search"
 	"github.com/blevesearch/bleve/size"
+	"github.com/unidoc/unidoc/common"
 )
 
 var reflectStaticSizeTermQueryScorer int
@@ -127,8 +128,6 @@ func (s *TermQueryScorer) Score(ctx *search.SearchContext, termMatch *index.Term
 		tf = math.Sqrt(float64(termMatch.Freq))
 	}
 	score := tf * termMatch.Norm * s.idf
-	fmt.Printf("~~~ score=%.2f (tf=%.1f termMatch.Norm=%.1f s.idf=%.1f) ",
-		score, tf, termMatch.Norm, s.idf)
 
 	if s.options.Explain {
 		childrenExplanations := make([]*search.Explanation, 3)
@@ -164,7 +163,10 @@ func (s *TermQueryScorer) Score(ctx *search.SearchContext, termMatch *index.Term
 			}
 		}
 	}
-	fmt.Printf("=> score=%.2f\n", score)
+	common.Log.Debug("~~~ score=%.2f (tf=%.1f termMatch.Norm=%.1f s.idf=%.1f) "+
+		"Freq=%d queryWeight=%.2f => score=%.2f",
+		score, tf, termMatch.Norm, s.idf, termMatch.Freq, s.queryWeight, score)
+	// panic("ggggg")
 
 	rv := ctx.DocumentMatchPool.Get()
 	rv.IndexInternalID = append(rv.IndexInternalID, termMatch.ID...)
@@ -187,17 +189,16 @@ func (s *TermQueryScorer) Score(ctx *search.SearchContext, termMatch *index.Term
 				}
 				ap = append(ap, v.ArrayPositions...)
 			}
-			rv.FieldTermLocations =
-				append(rv.FieldTermLocations, search.FieldTermLocation{
-					Field: v.Field,
-					Term:  s.queryTerm,
-					Location: search.Location{
-						Pos:            v.Pos,
-						Start:          v.Start,
-						End:            v.End,
-						ArrayPositions: ap,
-					},
-				})
+			rv.FieldTermLocations = append(rv.FieldTermLocations, search.FieldTermLocation{
+				Field: v.Field,
+				Term:  s.queryTerm,
+				Location: search.Location{
+					Pos:            v.Pos,
+					Start:          v.Start,
+					End:            v.End,
+					ArrayPositions: ap,
+				},
+			})
 		}
 	}
 

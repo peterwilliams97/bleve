@@ -21,6 +21,7 @@ import (
 	"github.com/blevesearch/bleve/search"
 	"github.com/blevesearch/bleve/search/scorer"
 	"github.com/blevesearch/bleve/size"
+	"github.com/unidoc/unidoc/common"
 )
 
 var reflectStaticSizeTermSearcher int
@@ -95,8 +96,11 @@ func (s *TermSearcher) Next(ctx *search.SearchContext) (*search.DocumentMatch, e
 	}
 
 	// score match
+	common.Log.Debug("TermSearcher.Next scorer=%T", s.scorer)
 	docMatch := s.scorer.Score(ctx, termMatch)
 	// return doc match
+	common.Log.Debug("TermSearcher.Next: reader=%T\n\tdocMatch=%#v", s.reader, docMatch)
+
 	return docMatch, nil
 
 }

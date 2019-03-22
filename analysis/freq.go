@@ -30,8 +30,8 @@ func init() {
 	reflectStaticSizeTokenFreq = int(reflect.TypeOf(tf).Size())
 }
 
-// TokenLocation represents one occurrence of a term at a particular location in
-// a field. Start, End and Position have the same meaning as in analysis.Token.
+// TokenLocation represents one occurrence of a term at a particular location in a field. Start, End
+// and Position have the same meaning as in analysis.Token.
 // Field and ArrayPositions identify the field value in the source document.
 // See document.Field for details.
 type TokenLocation struct {
@@ -43,13 +43,10 @@ type TokenLocation struct {
 }
 
 func (tl *TokenLocation) Size() int {
-	rv := reflectStaticSizeTokenLocation
-	rv += len(tl.ArrayPositions) * size.SizeOfUint64
-	return rv
+	return reflectStaticSizeTokenLocation + len(tl.ArrayPositions)*size.SizeOfUint64
 }
 
-// TokenFreq represents all the occurrences of a term in all fields of a
-// document.
+// TokenFreq represents all the occurrences of a term in all fields of a document.
 type TokenFreq struct {
 	Term      []byte
 	Locations []*TokenLocation
@@ -69,8 +66,7 @@ func (tf *TokenFreq) Frequency() int {
 	return tf.frequency
 }
 
-// TokenFrequencies maps document terms to their combined frequencies from all
-// fields.
+// TokenFrequencies maps document terms to their combined frequencies from all fields.
 type TokenFrequencies map[string]*TokenFreq
 
 func (tfs TokenFrequencies) Size() int {

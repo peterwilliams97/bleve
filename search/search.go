@@ -20,6 +20,7 @@ import (
 
 	"github.com/blevesearch/bleve/index"
 	"github.com/blevesearch/bleve/size"
+	"github.com/unidoc/unidoc/common"
 )
 
 var reflectStaticSizeDocumentMatch int
@@ -199,7 +200,7 @@ func (dm *DocumentMatch) Size() int {
 func (dm *DocumentMatch) Complete(prealloc []Location) []Location {
 	// Transform the FieldTermLocations slice into the Locations map.
 	nlocs := len(dm.FieldTermLocations)
-	fmt.Printf("    DocumentMatch.Complete: nlocs=%d\n", nlocs)
+	common.Log.Debug("    DocumentMatch.Complete: nlocs=%d", nlocs)
 
 	if nlocs > 0 {
 		if cap(prealloc) < nlocs {

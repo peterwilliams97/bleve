@@ -12,11 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package en implements an analyzer with reasonable defaults for processing
-// English text.
+// Package en implements an analyzer with reasonable defaults for processing English text.
 //
-// It strips possessive suffixes ('s), transforms tokens to lower case,
-// removes stopwords from a built-in list, and applies porter stemming.
+// It strips possessive suffixes ('s), transforms tokens to lower case, removes stopwords from a
+// built-in list, and applies porter stemming.
 //
 // The built-in stopwords list is defined in EnglishStopWords.
 package en
