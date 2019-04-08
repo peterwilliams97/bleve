@@ -61,7 +61,8 @@ func indexStorePath(path string) string {
 	return path + string(os.PathSeparator) + storePath
 }
 
-func newIndexUsing(path string, mapping mapping.IndexMapping, indexType string, kvstore string, kvconfig map[string]interface{}) (*indexImpl, error) {
+func newIndexUsing(path string, mapping mapping.IndexMapping, indexType string, kvstore string,
+	kvconfig map[string]interface{}) (*indexImpl, error) {
 	// first validate the mapping
 	err := mapping.Validate()
 	if err != nil {
@@ -102,10 +103,12 @@ func newIndexUsing(path string, mapping mapping.IndexMapping, indexType string, 
 		return nil, ErrorUnknownIndexType
 	}
 
+	common.Log.Info("@@@ kvconfig=%+v", kvconfig)
 	rv.i, err = indexTypeConstructor(rv.meta.Storage, kvconfig, Config.analysisQueue)
 	if err != nil {
 		return nil, err
 	}
+	// panic("#####3")
 	err = rv.i.Open()
 	if err != nil {
 		if err == index.ErrorUnknownStorageType {
@@ -113,7 +116,6 @@ func newIndexUsing(path string, mapping mapping.IndexMapping, indexType string, 
 		}
 		return nil, err
 	}
-
 	// now persist the mapping
 	mappingBytes, err := json.Marshal(mapping)
 	if err != nil {
@@ -132,6 +134,7 @@ func newIndexUsing(path string, mapping mapping.IndexMapping, indexType string, 
 	return &rv, nil
 }
 
+// !@#$
 func openIndexUsing(path string, runtimeConfig map[string]interface{}) (rv *indexImpl, err error) {
 	rv = &indexImpl{
 		path: path,
@@ -446,6 +449,8 @@ func (i *indexImpl) SearchInContext(ctx context.Context, req *SearchRequest) (
 
 	// open a reader for this search
 	indexReader, err := i.i.Reader()
+	common.Log.Info("**** i.i=%T", i.i) // !@#$
+	common.Log.Info("**** indexReader=%T", indexReader)
 	if err != nil {
 		return nil, fmt.Errorf("error opening index reader %v", err)
 	}
@@ -521,9 +526,9 @@ func (i *indexImpl) SearchInContext(ctx context.Context, req *SearchRequest) (
 	}
 
 	hits := collector.Results()
-	common.Log.Debug("&&& indexImpl.SearchInContex: hit=%d", len(hits))
+	common.Log.Info("&&& indexImpl.SearchInContex: hits=%d", len(hits))
 	for i, h := range hits {
-		common.Log.Debug("%6d: %s", i, h)
+		common.Log.Info("%6d: %s", i, h)
 	}
 	// panic("ff")
 
@@ -583,6 +588,7 @@ func (i *indexImpl) SearchInContext(ctx context.Context, req *SearchRequest) (
 func LoadAndHighlightFields(hit *search.DocumentMatch, req *SearchRequest,
 	indexName string, r index.IndexReader,
 	highlighter highlight.Highlighter) error {
+
 	if len(req.Fields) > 0 || highlighter != nil {
 		doc, err := r.Document(hit.ID)
 		if err == nil && doc != nil {

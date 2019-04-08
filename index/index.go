@@ -48,8 +48,8 @@ type Index interface {
 	SetInternal(key, val []byte) error
 	DeleteInternal(key []byte) error
 
-	// Reader returns a low-level accessor on the index data. Close it to
-	// release associated resources.
+	// Reader returns a low-level accessor on the index data. Close it to release associated
+	// resources. !@#$
 	Reader() (IndexReader, error)
 
 	Stats() json.Marshaler

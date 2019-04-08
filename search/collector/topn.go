@@ -126,7 +126,8 @@ func (hc *TopNCollector) Size() int {
 // Collect goes to the index to find the matching documents.
 func (hc *TopNCollector) Collect(ctx context.Context, searcher search.Searcher,
 	reader index.IndexReader) error {
-	common.Log.Debug("+++ TopNCollector.Collect")
+
+	common.Log.Info("+++ TopNCollector.Collect")
 
 	startTime := time.Now()
 	var err error
@@ -139,9 +140,10 @@ func (hc *TopNCollector) Collect(ctx context.Context, searcher search.Searcher,
 		backingSize = PreAllocSizeSkipCap + 1
 	}
 	searchContext := &search.SearchContext{
-		DocumentMatchPool: search.NewDocumentMatchPool(backingSize+searcher.DocumentMatchPoolSize(), len(hc.sort)),
-		Collector:         hc,
-		IndexReader:       reader,
+		DocumentMatchPool: search.NewDocumentMatchPool(backingSize+searcher.DocumentMatchPoolSize(),
+			len(hc.sort)),
+		Collector:   hc,
+		IndexReader: reader,
 	}
 
 	hc.dvReader, err = reader.DocValueReader(hc.neededFields)

@@ -55,7 +55,7 @@ func newDisjunctionSearcher(indexReader index.IndexReader,
 	}
 
 	if len(qsearchers) > DisjunctionHeapTakeover {
-		panic("newDisjunctionSearcher->newDisjunctionHeapSearcher")
+		// panic("newDisjunctionSearcher->newDisjunctionHeapSearcher")
 		return newDisjunctionHeapSearcher(indexReader, qsearchers, min, options, limit)
 	}
 	// panic("newDisjunctionSearcher->newDisjunctionSliceSearcher")

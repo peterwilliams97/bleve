@@ -141,8 +141,7 @@ func (b *Batch) PersistedCallback() index.BatchCallback {
 // created using the New() and Open() methods.
 //
 // Index() takes an input value, deduces a DocumentMapping for its type,
-// assigns string paths to its fields or values then applies field mappings on
-// them.
+// assigns string paths to its fields or values then applies field mappings on them.
 //
 // The DocumentMapping used to index a value is deduced by the following rules:
 // 1) If value implements mapping.bleveClassifier interface, resolve the mapping from BleveType().

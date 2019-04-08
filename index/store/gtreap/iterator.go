@@ -12,9 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package gtreap provides an in-memory implementation of the
-// KVStore interfaces using the gtreap balanced-binary treap,
-// copy-on-write data structure.
+// Package gtreap provides an in-memory implementation of the KVStore interfaces using the
+// gtreap balanced-binary treap, copy-on-write data structure.
 package gtreap
 
 import (
@@ -62,6 +61,7 @@ func (w *Iterator) Seek(k []byte) {
 	w.restart(&Item{k: k})
 }
 
+// !@#$
 func (w *Iterator) restart(start *Item) *Iterator {
 	cancelCh := make(chan struct{})
 	nextCh := make(chan *Item, 1)
@@ -95,11 +95,18 @@ func (w *Iterator) restart(start *Item) *Iterator {
 	return w
 }
 
+var count = 0
+
 func (w *Iterator) Next() {
 	w.m.Lock()
 	nextCh := w.nextCh
 	w.m.Unlock()
 	w.curr, w.currOk = <-nextCh
+	// common.Log.Info("Next: count=%d curr=%T ok=%t", count, w.curr, w.currOk)
+	// if count == 16 {
+	// 	panic("fffff")
+	// }
+	count++
 }
 
 func (w *Iterator) Current() ([]byte, []byte, bool) {

@@ -30,6 +30,7 @@ import (
 	"github.com/blevesearch/bleve/index"
 	"github.com/blevesearch/bleve/index/store"
 	"github.com/blevesearch/bleve/registry"
+	"github.com/unidoc/unidoc/common"
 
 	"github.com/golang/protobuf/proto"
 )
@@ -89,10 +90,13 @@ func (udc *UpsideDownCouch) init(kvwriter store.KVWriter) (err error) {
 	}
 
 	err = udc.batchRows(kvwriter, nil, rowsAll, nil)
+	// panic("###@@@1")
 	return
 }
 
 func (udc *UpsideDownCouch) loadSchema(kvreader store.KVReader) (err error) {
+	common.Log.Info("loadSchema: kvreader=%T", kvreader)
+	// panic("loadSchema")
 
 	it := kvreader.PrefixIterator([]byte{'f'})
 	defer func() {
@@ -145,7 +149,12 @@ func PutRowBuffer(buf []byte) {
 	rowBufferPool.Put(buf)
 }
 
-func (udc *UpsideDownCouch) batchRows(writer store.KVWriter, addRowsAll [][]UpsideDownCouchRow, updateRowsAll [][]UpsideDownCouchRow, deleteRowsAll [][]UpsideDownCouchRow) (err error) {
+func (udc *UpsideDownCouch) batchRows(writer store.KVWriter, addRowsAll [][]UpsideDownCouchRow,
+	updateRowsAll [][]UpsideDownCouchRow, deleteRowsAll [][]UpsideDownCouchRow) (err error) {
+
+	// common.Log.Info("batchRows: addRowsAll=%d updateRowsAll=%d=%#v deleteRowsAll=%d",
+	// 	len(addRowsAll), len(updateRowsAll), updateRowsAll, len(deleteRowsAll))
+	// panic("batchRows")
 	dictionaryDeltas := make(map[string]int64)
 
 	// count up bytes needed for buffering.
@@ -302,7 +311,8 @@ func (udc *UpsideDownCouch) Open() (err error) {
 		return
 	}
 
-	// now open the store
+	// now open the store !@#$
+	// panic("#####2")
 	udc.store, err = storeConstructor(&mergeOperator, udc.storeConfig)
 	if err != nil {
 		return
@@ -321,6 +331,9 @@ func (udc *UpsideDownCouch) Open() (err error) {
 		_ = kvreader.Close()
 		return
 	}
+
+	common.Log.Info("~~~ version=%+v not-nil=%t", value, value != nil)
+	// panic("####@1")
 
 	if value != nil {
 		err = udc.loadSchema(kvreader)
@@ -355,6 +368,7 @@ func (udc *UpsideDownCouch) Open() (err error) {
 
 		// init the index
 		err = udc.init(kvwriter)
+		// panic("####@2")
 	}
 
 	return
@@ -1019,6 +1033,9 @@ func (udc *UpsideDownCouch) Reader() (index.IndexReader, error) {
 	if err != nil {
 		return nil, fmt.Errorf("error opening store reader: %v", err)
 	}
+	common.Log.Info("xxxxx UpsideDownCouch.Reader: store=%T kvr=%T", udc.store, kvr)
+	// panic("UpsideDownCouch.Reader")
+
 	udc.m.RLock()
 	defer udc.m.RUnlock()
 	return &IndexReader{

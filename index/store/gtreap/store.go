@@ -12,9 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package gtreap provides an in-memory implementation of the
-// KVStore interfaces using the gtreap balanced-binary treap,
-// copy-on-write data structure.
+// Package gtreap provides an in-memory implementation of the KVStore interfaces using the
+// gtreap balanced-binary treap, copy-on-write data structure.
 
 package gtreap
 
@@ -47,7 +46,9 @@ func itemCompare(a, b interface{}) int {
 }
 
 func New(mo store.MergeOperator, config map[string]interface{}) (store.KVStore, error) {
+	// panic("#####1")
 	path, ok := config["path"].(string)
+	// panic(fmt.Errorf("path=%q ok=%t", path, ok))
 	if !ok {
 		return nil, fmt.Errorf("must specify path")
 	}

@@ -12,9 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package gtreap provides an in-memory implementation of the
-// KVStore interfaces using the gtreap balanced-binary treap,
-// copy-on-write data structure.
+// Package gtreap provides an in-memory implementation of the KVStore interfaces using
+// the gtreap balanced-binary treap, copy-on-write data structure.
 package gtreap
 
 import (
@@ -42,6 +41,8 @@ func (w *Writer) ExecuteBatch(batch store.KVBatch) error {
 	if !ok {
 		return fmt.Errorf("wrong type of batch")
 	}
+
+	// common.Log.Info("Writer.ExecuteBatch: w=%T batch=%#v", w, emulatedBatch)
 
 	w.s.m.Lock()
 	for k, mergeOps := range emulatedBatch.Merger.Merges {

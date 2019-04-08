@@ -12,14 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package gtreap provides an in-memory implementation of the
-// KVStore interfaces using the gtreap balanced-binary treap,
-// copy-on-write data structure.
+// Package gtreap provides an in-memory implementation of the KVStore interfaces using
+// the gtreap balanced-binary treap, copy-on-write data structure.
 package gtreap
 
 import (
 	"github.com/blevesearch/bleve/index/store"
-
 	"github.com/steveyen/gtreap"
 )
 

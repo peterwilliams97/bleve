@@ -64,6 +64,9 @@ func (r *UpsideDownCouchTermFieldReader) Size() int {
 func newUpsideDownCouchTermFieldReader(indexReader *IndexReader, term []byte, field uint16,
 	includeFreq, includeNorm, includeTermVectors bool) (*UpsideDownCouchTermFieldReader, error) {
 
+	common.Log.Info("++++ newUpsideDownCouchTermFieldReader indexReader=%T", indexReader.kvreader)
+	// panic("newUpsideDownCouchTermFieldReader")
+
 	bufNeeded := termFrequencyRowKeySize(term, nil)
 	if bufNeeded < dictionaryRowKeySize(term) {
 		bufNeeded = dictionaryRowKeySize(term)
@@ -110,10 +113,11 @@ func (r *UpsideDownCouchTermFieldReader) Count() uint64 {
 	return r.count
 }
 
+// !@#$
 func (r *UpsideDownCouchTermFieldReader) Next(preAlloced *index.TermFieldDoc) (
 	*index.TermFieldDoc, error) {
 
-	common.Log.Debug("UpsideDownCouchTermFieldReader.Next")
+	// common.Log.Info("UpsideDownCouchTermFieldReader.Next %T", r.iterator)
 
 	if r.iterator != nil {
 		// We treat tfrNext also like an initialization flag, which tells us whether we need to
