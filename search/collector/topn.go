@@ -127,7 +127,7 @@ func (hc *TopNCollector) Size() int {
 func (hc *TopNCollector) Collect(ctx context.Context, searcher search.Searcher,
 	reader index.IndexReader) error {
 
-	common.Log.Info("+++ TopNCollector.Collect")
+	// common.Log.Info("+++ TopNCollector.Collect")
 
 	startTime := time.Now()
 	var err error

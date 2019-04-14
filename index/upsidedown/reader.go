@@ -23,7 +23,6 @@ import (
 	"github.com/blevesearch/bleve/index"
 	"github.com/blevesearch/bleve/index/store"
 	"github.com/blevesearch/bleve/size"
-	"github.com/unidoc/unidoc/common"
 )
 
 var reflectStaticSizeUpsideDownCouchTermFieldReader int
@@ -64,7 +63,7 @@ func (r *UpsideDownCouchTermFieldReader) Size() int {
 func newUpsideDownCouchTermFieldReader(indexReader *IndexReader, term []byte, field uint16,
 	includeFreq, includeNorm, includeTermVectors bool) (*UpsideDownCouchTermFieldReader, error) {
 
-	common.Log.Info("++++ newUpsideDownCouchTermFieldReader indexReader=%T", indexReader.kvreader)
+	// common.Log.Info("++++ newUpsideDownCouchTermFieldReader indexReader=%T", indexReader.kvreader)
 	// panic("newUpsideDownCouchTermFieldReader")
 
 	bufNeeded := termFrequencyRowKeySize(term, nil)

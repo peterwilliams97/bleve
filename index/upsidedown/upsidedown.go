@@ -30,7 +30,6 @@ import (
 	"github.com/blevesearch/bleve/index"
 	"github.com/blevesearch/bleve/index/store"
 	"github.com/blevesearch/bleve/registry"
-	"github.com/unidoc/unidoc/common"
 
 	"github.com/golang/protobuf/proto"
 )
@@ -95,7 +94,7 @@ func (udc *UpsideDownCouch) init(kvwriter store.KVWriter) (err error) {
 }
 
 func (udc *UpsideDownCouch) loadSchema(kvreader store.KVReader) (err error) {
-	common.Log.Info("loadSchema: kvreader=%T", kvreader)
+	// common.Log.Info("loadSchema: kvreader=%T", kvreader)
 	// panic("loadSchema")
 
 	it := kvreader.PrefixIterator([]byte{'f'})
@@ -332,7 +331,7 @@ func (udc *UpsideDownCouch) Open() (err error) {
 		return
 	}
 
-	common.Log.Info("~~~ version=%+v not-nil=%t", value, value != nil)
+	// common.Log.Info("~~~ version=%+v not-nil=%t", value, value != nil)
 	// panic("####@1")
 
 	if value != nil {
@@ -1033,7 +1032,7 @@ func (udc *UpsideDownCouch) Reader() (index.IndexReader, error) {
 	if err != nil {
 		return nil, fmt.Errorf("error opening store reader: %v", err)
 	}
-	common.Log.Info("xxxxx UpsideDownCouch.Reader: store=%T kvr=%T", udc.store, kvr)
+	// common.Log.Info("xxxxx UpsideDownCouch.Reader: store=%T kvr=%T", udc.store, kvr)
 	// panic("UpsideDownCouch.Reader")
 
 	udc.m.RLock()

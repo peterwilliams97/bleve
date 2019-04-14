@@ -33,7 +33,6 @@ import (
 	"github.com/blevesearch/bleve/search/collector"
 	"github.com/blevesearch/bleve/search/facet"
 	"github.com/blevesearch/bleve/search/highlight"
-	"github.com/unidoc/unidoc/common"
 )
 
 type indexImpl struct {
@@ -103,7 +102,7 @@ func newIndexUsing(path string, mapping mapping.IndexMapping, indexType string, 
 		return nil, ErrorUnknownIndexType
 	}
 
-	common.Log.Info("@@@ kvconfig=%+v", kvconfig)
+	// common.Log.Info("@@@ kvconfig=%+v", kvconfig)
 	rv.i, err = indexTypeConstructor(rv.meta.Storage, kvconfig, Config.analysisQueue)
 	if err != nil {
 		return nil, err
@@ -449,8 +448,8 @@ func (i *indexImpl) SearchInContext(ctx context.Context, req *SearchRequest) (
 
 	// open a reader for this search
 	indexReader, err := i.i.Reader()
-	common.Log.Info("**** i.i=%T", i.i) // !@#$
-	common.Log.Info("**** indexReader=%T", indexReader)
+	// common.Log.Info("**** i.i=%T", i.i) // !@#$
+	// common.Log.Info("**** indexReader=%T", indexReader)
 	if err != nil {
 		return nil, fmt.Errorf("error opening index reader %v", err)
 	}
@@ -526,10 +525,10 @@ func (i *indexImpl) SearchInContext(ctx context.Context, req *SearchRequest) (
 	}
 
 	hits := collector.Results()
-	common.Log.Info("&&& indexImpl.SearchInContex: hits=%d", len(hits))
-	for i, h := range hits {
-		common.Log.Info("%6d: %s", i, h)
-	}
+	// common.Log.Info("&&& indexImpl.SearchInContex: hits=%d", len(hits))
+	// for i, h := range hits {
+	// 	common.Log.Info("%6d: %s", i, h)
+	// }
 	// panic("ff")
 
 	var highlighter highlight.Highlighter
